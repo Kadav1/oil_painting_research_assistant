@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "schema_id": "answer_label_schema",
+    "version": "v1.0",
+    "description": "Machine-readable definitions for answer status labels used in the Oil Painting Research Assistant. Labels are applied as prose qualifiers in answers to indicate evidence type and certainty level. All label values must match controlled_vocabulary.answer_label."
+  },
+
+  "labels": [
+    {
+      "label": "well_established",
+      "description": "Claim is supported by consistent evidence across multiple independent high-trust sources. Material chemistry, well-documented historical facts.",
+      "scope_level": "general",
+      "typical_source_basis": "Tier 1 and Tier 2 sources in agreement. No significant contradictions in corpus.",
+      "conflict_compatibility": "incompatible_with_mixed_evidence",
+      "display_mode": "positive_assertion",
+      "allowed_user_facing_phrases": [
+        "this is well established",
+        "well-documented in conservation literature",
+        "consistent across technical references",
+        "widely confirmed in the literature"
+      ]
+    },
+    {
+      "label": "historically_documented",
+      "description": "Claim is supported by historical sources, conservation examination, or period documentation. Does not necessarily apply to modern materials.",
+      "scope_level": "historical",
+      "typical_source_basis": "Tier 1 conservation sources, Tier 4 historical practice sources. Case-specific scope common.",
+      "conflict_compatibility": "may_coexist_with_uncertain",
+      "display_mode": "historical_qualifier",
+      "allowed_user_facing_phrases": [
+        "documented in historical sources",
+        "attested in conservation examinations",
+        "recorded in period documentation",
+        "historically observed"
+      ]
+    },
+    {
+      "label": "product_specific",
+      "description": "Claim applies to a specific brand, product line, or formulation. Must not be generalized to all products with the same pigment code or binder.",
+      "scope_level": "product",
+      "typical_source_basis": "Tier 3 manufacturer sources (TDS, product catalog, SDS).",
+      "conflict_compatibility": "must_be_distinguished_from_general_chemistry",
+      "display_mode": "scope_qualifier",
+      "allowed_user_facing_phrases": [
+        "specific to [brand] [product]",
+        "per [manufacturer] technical data",
+        "this applies to this product line, not all paints with this pigment",
+        "product-specific guidance from [brand]"
+      ]
+    },
+    {
+      "label": "case_specific",
+      "description": "Claim is from a case study or examination of a specific painting or object. Does not automatically generalize.",
+      "scope_level": "case",
+      "typical_source_basis": "Tier 1 conservation reports, examination records, treatment records.",
+      "conflict_compatibility": "must_not_be_universalized",
+      "display_mode": "scope_qualifier",
+      "allowed_user_facing_phrases": [
+        "observed in [specific painting/object]",
+        "this was found in a specific case",
+        "case-study evidence — not a universal finding",
+        "documented in [source] for this particular work"
+      ]
+    },
+    {
+      "label": "likely_but_context_dependent",
+      "description": "Claim is plausible and supported by evidence, but the outcome varies by context: formulation, proportion, application method, drying conditions, etc.",
+      "scope_level": "conditional",
+      "typical_source_basis": "Multiple tiers; evidence supports the claim in general but with important caveats.",
+      "conflict_compatibility": "compatible_with_mixed_evidence",
+      "display_mode": "hedged_assertion",
+      "allowed_user_facing_phrases": [
+        "likely, but depends on [context]",
+        "generally true, but formulation matters",
+        "often observed, but not universal",
+        "probable in most cases, with exceptions"
+      ]
+    },
+    {
+      "label": "mixed_evidence",
+      "description": "Sources disagree or evidence points in different directions. Both positions should be presented; conflict must be disclosed.",
+      "scope_level": "conflicted",
+      "typical_source_basis": "Two or more sources with different claims on the same topic. May span tiers.",
+      "conflict_compatibility": "requires_disclosure",
+      "display_mode": "conflict_disclosure",
+      "allowed_user_facing_phrases": [
+        "sources disagree on this point",
+        "the evidence is mixed",
+        "some sources suggest [X]; others indicate [Y]",
+        "no consensus in available sources"
+      ]
+    },
+    {
+      "label": "uncertain",
+      "description": "Evidence is limited, absent, or insufficient to support a confident claim. Uncertainty must be stated explicitly.",
+      "scope_level": "unknown",
+      "typical_source_basis": "No strong source basis found. May indicate gap in corpus or genuinely unknown territory.",
+      "conflict_compatibility": "compatible_with_historically_documented",
+      "display_mode": "uncertainty_disclosure",
+      "allowed_user_facing_phrases": [
+        "uncertain — limited evidence available",
+        "not well-documented in available sources",
+        "the answer is not clear from current sources",
+        "this is not established in the corpus"
+      ]
+    },
+    {
+      "label": "interpretive",
+      "description": "Claim reflects professional judgment, teaching convention, or an interpretive reading of evidence. Not directly falsifiable from sources alone.",
+      "scope_level": "judgment",
+      "typical_source_basis": "Tier 5 color theory and teaching sources, atelier manuals. May be corroborated by Tier 1–2 but requires framing.",
+      "conflict_compatibility": "must_not_be_presented_as_factual",
+      "display_mode": "interpretive_qualifier",
+      "allowed_user_facing_phrases": [
+        "this is a widely held teaching convention",
+        "interpretive — not a direct material law",
+        "professional judgment based on available evidence",
+        "this reflects common atelier practice, not documented chemistry"
+      ]
+    }
+  ]
+}

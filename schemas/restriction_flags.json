@@ -1,0 +1,61 @@
+{
+  "_meta": {
+    "schema_id": "restriction_flags",
+    "version": "v1.0",
+    "description": "Machine-readable definitions for operational restriction flags in the Oil Painting Research Assistant. Restriction flags constrain how a chunk or source may be used in retrieval, citation, and answer generation. A chunk may carry multiple flags simultaneously. All flag values must match controlled_vocabulary.restriction_flag."
+  },
+
+  "flags": [
+    {
+      "flag": "product_only",
+      "description": "This chunk contains product-specific information only. It must not be used to support claims about general material chemistry or historical practice.",
+      "blocks": ["historical_practice_queries", "general_chemistry_claims"],
+      "requires_label": "product_specific",
+      "applies_to": ["chunk", "source"]
+    },
+    {
+      "flag": "not_for_historical_use",
+      "description": "This chunk contains modern information (formulations, products, practices) that must not be cited as historical evidence.",
+      "blocks": ["historical_plausibility_queries", "period_practice_queries"],
+      "requires_label": null,
+      "applies_to": ["chunk"]
+    },
+    {
+      "flag": "retrieval_only",
+      "description": "This chunk may be used to inform retrieval ranking and answer assembly but must not be directly cited in answers. Use its content but do not reference the source.",
+      "blocks": ["direct_citation"],
+      "requires_label": null,
+      "applies_to": ["chunk", "source"]
+    },
+    {
+      "flag": "citation_caution",
+      "description": "This chunk may be used but citations should be prefaced with a note about the source's limitations (e.g. commercial publisher, unreviewed web content, interpretive text).",
+      "blocks": [],
+      "requires_label": null,
+      "applies_to": ["chunk", "source"],
+      "note": "Does not block citation. Flags that a caveat should accompany it."
+    },
+    {
+      "flag": "case_specific_only",
+      "description": "This chunk is from a case study and must not be generalized. Any claim derived from it must be labeled case_specific and scoped to the specific case.",
+      "blocks": ["general_rule_claims"],
+      "requires_label": "case_specific",
+      "applies_to": ["chunk"]
+    },
+    {
+      "flag": "needs_manual_review",
+      "description": "This chunk or source requires human review before use. It may have quality issues, uncertain metadata, or OCR problems. Must not be served until review is complete.",
+      "blocks": ["all_retrieval"],
+      "requires_label": null,
+      "applies_to": ["chunk", "source"],
+      "note": "Effective only if approval_state is not_approved or internal_draft_only. A reviewed record that passes review should have this flag removed."
+    },
+    {
+      "flag": "not_live_allowed",
+      "description": "This chunk is approved for testing and internal use but may not be served in live user-facing responses. Typically set when content is useful for development but not ready for production.",
+      "blocks": ["live_response"],
+      "requires_label": null,
+      "applies_to": ["chunk", "source"]
+    }
+  ]
+}

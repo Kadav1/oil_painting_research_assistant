@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "schema_id": "benchmark_template",
+    "version": "v1.0",
+    "description": "Empty benchmark record template for the Oil Painting Research Assistant. Copy this structure when authoring new benchmark records. All field values are placeholders. All enum values must match controlled_vocabulary.json. Record must conform to schemas/benchmark_template.json."
+  },
+
+  "benchmark_id": "BMK-{CATEGORY_CODE}-{NNN}",
+  "category": "{PIG|BND|CON|HIS|COL|PRD|TRM}",
+  "question": "The user-style question as a natural language prompt.",
+  "difficulty": "{easy|medium|hard}",
+  "status": "draft",
+
+  "target_modes": [],
+  "expected_source_tiers": [],
+  "must_use_domains": [],
+  "must_not_confuse": [],
+
+  "expected_answer_shape": "Description of what a correct, well-formed answer should contain.",
+
+  "gold_claims": [],
+  "known_uncertainties": [],
+  "evaluation_notes": "Guidance for human evaluators.",
+
+  "must_include": [],
+  "required_distinctions": [],
+  "must_not_say": [],
+  "uncertainty_handling": "How the answer should handle uncertainty for this question.",
+  "citation_expectation": "What source types or tiers should be cited.",
+  "failure_tags_if_wrong": []
+}

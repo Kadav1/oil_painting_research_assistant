@@ -1,0 +1,773 @@
+[
+  {
+    "benchmark_id": "BMK-PIG-001",
+    "category": "PIG",
+    "question": "Why does zinc white often cause concern in oil painting?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Studio", "Conservation"],
+    "expected_source_tiers": [1, 2],
+    "must_use_domains": ["pigment", "conservation"],
+    "must_not_confuse": [
+      "Do not treat product-specific warnings about zinc white as a universal prohibition",
+      "Do not conflate zinc_white (PW4) with titanium_white (PW6) or lead_white (PW1)"
+    ],
+    "expected_answer_shape": "Direct explanation of brittleness and paint film concerns; distinction between conservation findings and modern product guidance; practical scope qualification.",
+    "gold_claims": [
+      "Zinc white is associated with paint film brittleness concerns in oil",
+      "The degree of risk varies by formulation, proportion, and application context",
+      "Conservation literature and modern product guidance should be distinguished"
+    ],
+    "known_uncertainties": [
+      "Risk level is context-dependent — not a simple yes/no",
+      "Different formulations and proportions present different risk profiles"
+    ],
+    "evaluation_notes": "Penalize answers that either dismiss concerns entirely or treat the risk as absolute. Look for explicit scope qualification and distinction between product guidance and conservation evidence.",
+    "must_include": [
+      "Brittleness or paint film integrity concern",
+      "Context-dependence of the risk",
+      "Distinction between formulation-specific and universal claims"
+    ],
+    "required_distinctions": [
+      "zinc_white vs. titanium_white — different chemistry and risk profile",
+      "product-specific guidance vs. general conservation evidence"
+    ],
+    "must_not_say": [
+      "Zinc white should never be used in oil painting (as an absolute rule)",
+      "Zinc white is fine — no known concerns"
+    ],
+    "uncertainty_handling": "Acknowledge that risk level is not settled as a universal fact. Use likely_but_context_dependent or mixed_evidence label.",
+    "citation_expectation": "Conservation literature (Tier 1) and/or pigment reference sources (Tier 2) should be cited. Manufacturer guidance labeled as product-specific.",
+    "failure_tags_if_wrong": ["PRODUCT_UNIVERSALIZED", "UNCERTAINTY_COLLAPSED", "CASE_GENERALIZED"]
+  },
+
+  {
+    "benchmark_id": "BMK-PIG-002",
+    "category": "PIG",
+    "question": "What is smalt, and why can it discolor in oil paintings?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Art History", "Conservation"],
+    "expected_source_tiers": [1, 2, 4],
+    "must_use_domains": ["pigment", "conservation", "historical_practice"],
+    "must_not_confuse": [
+      "Smalt is not cobalt blue (PB28) — it is a glass material",
+      "Smalt is not equivalent to any modern pigment"
+    ],
+    "expected_answer_shape": "Definition of smalt as a cobalt-containing blue glass; historical use context; explanation of decolorization mechanism in oil; conservation significance.",
+    "gold_claims": [
+      "Smalt is a cobalt-containing blue glass pigment",
+      "Used in European painting from approximately the 15th through 18th centuries",
+      "Known to decolorize (lose blue color) in oil media over time",
+      "Decolorization is a conservation concern in historical paintings"
+    ],
+    "known_uncertainties": [
+      "Precise mechanism of decolorization is still studied",
+      "Rate of decolorization varies by oil type, cobalt content, and ground"
+    ],
+    "evaluation_notes": "Must establish smalt as a glass material distinct from cobalt blue. Must address decolorization in oil as a documented issue. Historical period context required.",
+    "must_include": [
+      "Smalt is a glass (not a calcined or lake pigment)",
+      "Historical period of use (15th–18th century)",
+      "Decolorization in oil media"
+    ],
+    "required_distinctions": [
+      "smalt vs. cobalt_blue — completely different materials",
+      "decolorization (loss of color) vs. discoloration (color shift) — clarify which is documented"
+    ],
+    "must_not_say": [
+      "Smalt is the same as cobalt blue",
+      "Smalt is a modern pigment"
+    ],
+    "uncertainty_handling": "Acknowledge that decolorization mechanism details are still under investigation. Use historically_documented for use patterns, uncertain or mixed_evidence for mechanism specifics.",
+    "citation_expectation": "Conservation literature (Tier 1) and pigment reference (Tier 2). Historical practice source (Tier 4) for use context.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "HISTORICAL_ANACHRONISM", "FABRICATED_CITATION"]
+  },
+
+  {
+    "benchmark_id": "BMK-PIG-003",
+    "category": "PIG",
+    "question": "What are the key differences between lead white, zinc white, and titanium white in oil painting?",
+    "difficulty": "hard",
+    "status": "approved",
+    "target_modes": ["Studio", "Conservation", "Art History"],
+    "expected_source_tiers": [1, 2, 3],
+    "must_use_domains": ["pigment", "conservation", "product"],
+    "must_not_confuse": [
+      "Do not conflate the three materials — each has distinct chemistry and handling",
+      "Do not present modern product guidance for one as a universal rule for all",
+      "Historical availability differs — titanium white is anachronistic before 20th century"
+    ],
+    "expected_answer_shape": "Systematic comparison of all three whites across: chemical composition, opacity, drying rate, film properties, conservation concerns, and historical availability.",
+    "gold_claims": [
+      "Lead white (PW1/PW2): historically dominant, high opacity, good drying, conservation concerns around toxicity and modern use",
+      "Zinc white (PW4): slower drying, semi-transparent, associated with paint film brittleness risk",
+      "Titanium white (PW6): highest opacity and tinting strength, introduced early 20th century, generally good film stability"
+    ],
+    "known_uncertainties": [
+      "Zinc white risk level is formulation- and context-dependent",
+      "Lead white conservation concerns vary by formulation and proportion"
+    ],
+    "evaluation_notes": "Award highest scores for systematic per-material comparison with correct scope. Penalize conflation of any two materials or historical anachronism (titanium in pre-20th century context).",
+    "must_include": [
+      "All three whites addressed individually",
+      "Historical availability of each",
+      "Film/conservation distinction for each",
+      "Opacity and tinting strength differences"
+    ],
+    "required_distinctions": [
+      "Each white is a chemically distinct material",
+      "Historical period of availability differs across the three"
+    ],
+    "must_not_say": [
+      "All three whites are interchangeable",
+      "Titanium white was used in 17th century painting"
+    ],
+    "uncertainty_handling": "Zinc white risk requires likely_but_context_dependent or mixed_evidence label. Lead white modern use concerns should be labeled with appropriate scope.",
+    "citation_expectation": "Pigment reference (Tier 2) for chemistry. Conservation literature (Tier 1) for film concerns. Manufacturer TDS (Tier 3) for product-specific properties where cited.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "HISTORICAL_ANACHRONISM", "PRODUCT_UNIVERSALIZED", "CASE_GENERALIZED"]
+  },
+
+  {
+    "benchmark_id": "BMK-PIG-004",
+    "category": "PIG",
+    "question": "Was verdigris commonly used in oil painting, and what are its known issues?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Art History", "Conservation"],
+    "expected_source_tiers": [1, 4],
+    "must_use_domains": ["pigment", "historical_practice", "conservation"],
+    "must_not_confuse": [
+      "Verdigris is not viridian or terre verte",
+      "Historical use does not imply modern availability or suitability"
+    ],
+    "expected_answer_shape": "Confirmation of historical use with period context; explanation of known chemical instability in oil media; note that it is not a modern studio pigment.",
+    "gold_claims": [
+      "Verdigris (copper acetate) was commonly used in European oil painting from medieval through early modern periods",
+      "Known to discolor and degrade in oil media",
+      "Not a standard modern studio pigment"
+    ],
+    "known_uncertainties": [
+      "Rate and degree of degradation varies by ground, varnish, and medium",
+      "Some instances show relative stability — context-dependent"
+    ],
+    "evaluation_notes": "Historical use should be labeled historically_documented. Degradation risk should be labeled with appropriate uncertainty. Do not present as modern recommendation.",
+    "must_include": [
+      "Historical period of use (approximately medieval through early modern)",
+      "Degradation/discoloration in oil as documented concern"
+    ],
+    "required_distinctions": [
+      "verdigris vs. viridian vs. terre_verte — different materials",
+      "Historical documentation vs. modern studio recommendation"
+    ],
+    "must_not_say": [
+      "Verdigris is the same as viridian",
+      "Verdigris is safe and recommended for modern use"
+    ],
+    "uncertainty_handling": "Degradation behavior should be labeled case_specific or mixed_evidence. Use historically_documented for use patterns.",
+    "citation_expectation": "Conservation literature (Tier 1) for degradation. Historical practice source (Tier 4) for use context.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "HISTORICAL_ANACHRONISM", "CASE_GENERALIZED"]
+  },
+
+  {
+    "benchmark_id": "BMK-BND-001",
+    "category": "BND",
+    "question": "Why might a painter choose walnut oil over linseed oil?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Studio"],
+    "expected_source_tiers": [2, 3],
+    "must_use_domains": ["binder"],
+    "must_not_confuse": [
+      "Do not present walnut oil as universally superior to linseed",
+      "Yellowing tendency differences are relative, not absolute"
+    ],
+    "expected_answer_shape": "Direct explanation of reduced yellowing tendency and lighter color; note of slower drying; practical recommendation context (blues, whites, light colors).",
+    "gold_claims": [
+      "Walnut oil is less prone to yellowing than linseed oil",
+      "Walnut oil dries more slowly than linseed",
+      "Historically used with blue and white pigments to reduce yellowing risk"
+    ],
+    "known_uncertainties": [
+      "Degree of yellowing difference is real but not always dramatic in practice",
+      "Product formulations may differ in actual yellowing behavior"
+    ],
+    "evaluation_notes": "Direct, practical answer expected. Should cover yellowing and drying tradeoff. No need for deep historical citation on this question.",
+    "must_include": [
+      "Reduced yellowing tendency",
+      "Slower drying as a tradeoff",
+      "Practical use case (blues, whites, light colors)"
+    ],
+    "required_distinctions": [
+      "walnut_oil vs. linseed_oil — different yellowing and drying properties",
+      "walnut_oil vs. poppy_oil — poppy is slower still and less stable in film"
+    ],
+    "must_not_say": [
+      "Walnut oil never yellows",
+      "Linseed oil always produces unacceptable yellowing"
+    ],
+    "uncertainty_handling": "Yellowing degree should be qualified as relative. Use likely_but_context_dependent if needed.",
+    "citation_expectation": "Pigment reference or manufacturer TDS acceptable. No hard historical citation required.",
+    "failure_tags_if_wrong": ["UNCERTAINTY_COLLAPSED", "PRODUCT_UNIVERSALIZED"]
+  },
+
+  {
+    "benchmark_id": "BMK-BND-002",
+    "category": "BND",
+    "question": "Why does burnt umber often dry faster than most other oil colors?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Studio"],
+    "expected_source_tiers": [2],
+    "must_use_domains": ["pigment", "binder"],
+    "must_not_confuse": [
+      "The fast drying is due to pigment chemistry, not the oil vehicle alone",
+      "Do not conflate raw_umber and burnt_umber drying behavior without distinction"
+    ],
+    "expected_answer_shape": "Direct explanation of manganese content in umber pigments acting as a drier; note that this applies to both raw and burnt umber; practical implications.",
+    "gold_claims": [
+      "Umber pigments contain manganese, which acts as a siccative (drier)",
+      "Manganese accelerates oxidative polymerization of drying oils",
+      "Both raw and burnt umber are fast dryers due to this chemistry"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "Clear technical answer expected. Manganese as siccative must be the central explanation.",
+    "must_include": [
+      "Manganese content as the cause",
+      "Siccative / drying acceleration mechanism"
+    ],
+    "required_distinctions": [
+      "Drying is due to pigment chemistry, not oil type alone"
+    ],
+    "must_not_say": [
+      "Burnt umber dries fast because of the oil it is ground in (without noting the pigment)",
+      "All earths dry at the same rate"
+    ],
+    "uncertainty_handling": "This is well_established — no hedging required on the mechanism.",
+    "citation_expectation": "Pigment reference (Tier 2) acceptable.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-BND-003",
+    "category": "BND",
+    "question": "What does stand oil do differently from raw linseed oil in oil painting?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Studio"],
+    "expected_source_tiers": [2, 3],
+    "must_use_domains": ["binder"],
+    "must_not_confuse": [
+      "Stand oil is not simply thick linseed oil — polymerization changes its properties",
+      "Stand oil and sun-thickened oil are produced differently"
+    ],
+    "expected_answer_shape": "Explanation of stand oil as heat-polymerized linseed; differences in viscosity, flow, drying, leveling, and yellowing compared to raw linseed.",
+    "gold_claims": [
+      "Stand oil is produced by heat-polymerizing linseed oil under inert conditions",
+      "Higher viscosity than raw linseed — produces long, ropy brushstrokes that level well",
+      "Slower drying than raw linseed",
+      "Less prone to yellowing than raw linseed"
+    ],
+    "known_uncertainties": [
+      "Film longevity comparisons between stand oil and raw linseed are source-dependent"
+    ],
+    "evaluation_notes": "Must address polymerization as the source of different properties. Viscosity, flow/leveling, and yellowing distinction all expected.",
+    "must_include": [
+      "Stand oil is polymerized linseed",
+      "Higher viscosity and leveling behavior",
+      "Reduced yellowing tendency"
+    ],
+    "required_distinctions": [
+      "stand_oil vs. raw linseed_oil — not the same material",
+      "stand_oil vs. sun_thickened_oil — different process"
+    ],
+    "must_not_say": [
+      "Stand oil is just thick linseed oil with no other differences"
+    ],
+    "uncertainty_handling": "Film longevity claims should be qualified. Core properties are well_established.",
+    "citation_expectation": "Pigment reference or manufacturer TDS acceptable.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-CON-001",
+    "category": "CON",
+    "question": "Why does oil paint sometimes wrinkle when drying?",
+    "difficulty": "hard",
+    "status": "approved",
+    "target_modes": ["Studio", "Conservation"],
+    "expected_source_tiers": [1, 2],
+    "must_use_domains": ["binder", "conservation"],
+    "must_not_confuse": [
+      "Wrinkling is caused by differential drying, not a specific pigment alone",
+      "Avoid presenting a single cause as universal — multiple factors contribute"
+    ],
+    "expected_answer_shape": "Explanation of surface-skinning before interior drying as the primary mechanism; contributing factors including thick application, slow-drying oils, and pigment type.",
+    "gold_claims": [
+      "Wrinkling occurs when the surface skins over while the interior remains wet",
+      "Thick impasto and slow-drying oils increase wrinkling risk",
+      "Overly oil-rich paint films are more susceptible",
+      "Poppy oil is particularly associated with wrinkling risk"
+    ],
+    "known_uncertainties": [
+      "Specific pigments and formulations vary in their contribution to wrinkling"
+    ],
+    "evaluation_notes": "Differential drying mechanism must be central. Practical contributing factors expected. Do not present single cause as definitive without qualification.",
+    "must_include": [
+      "Surface skinning before interior drying as the mechanism",
+      "Thick application as a contributing factor",
+      "Oil-rich film as a contributing factor"
+    ],
+    "required_distinctions": [
+      "Wrinkling is a film behavior, not a specific pigment issue"
+    ],
+    "must_not_say": [
+      "Only one specific pigment causes wrinkling",
+      "Wrinkling is caused by the canvas moving"
+    ],
+    "uncertainty_handling": "Contributing factors should be qualified as context-dependent. Core mechanism is well_established.",
+    "citation_expectation": "Conservation literature (Tier 1) or pigment reference (Tier 2).",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED", "PRODUCT_UNIVERSALIZED"]
+  },
+
+  {
+    "benchmark_id": "BMK-CON-002",
+    "category": "CON",
+    "question": "What does 'sinking in' mean in oil painting, and what causes it?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Studio", "Conservation"],
+    "expected_source_tiers": [2, 3],
+    "must_use_domains": ["binder", "technique"],
+    "must_not_confuse": [
+      "Sinking in is different from paint film failure — it is typically reversible",
+      "Do not conflate sinking in with blanching or sinking in varnish"
+    ],
+    "expected_answer_shape": "Definition of sinking in as oil absorption into lower layers, causing matte patches; explanation of causes (lean ground, too much solvent, lean underpainting); practical remedies.",
+    "gold_claims": [
+      "Sinking in occurs when oil from the paint film is absorbed into the ground or lower paint layers",
+      "Results in matte, dull, or sunken-looking passages",
+      "Caused by lean grounds, excessive solvent use, or painting over too-lean underpainting",
+      "Oiling out is the conventional remedy"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "Straightforward technical answer. Oiling out as remedy expected. No major uncertainty on the mechanism.",
+    "must_include": [
+      "Oil absorption as the mechanism",
+      "Matte or dull appearance as the result",
+      "Oiling out as a remedy"
+    ],
+    "required_distinctions": [
+      "sinking_in vs. blanching — different phenomena"
+    ],
+    "must_not_say": [
+      "Sinking in is paint film failure"
+    ],
+    "uncertainty_handling": "Well_established — minimal hedging needed.",
+    "citation_expectation": "Pigment reference or manufacturer technical guidance.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "MODE_MISALIGNMENT"]
+  },
+
+  {
+    "benchmark_id": "BMK-CON-003",
+    "category": "CON",
+    "question": "Why can a glaze lose saturation over time in an oil painting?",
+    "difficulty": "hard",
+    "status": "approved",
+    "target_modes": ["Conservation"],
+    "expected_source_tiers": [1, 2],
+    "must_use_domains": ["binder", "conservation"],
+    "must_not_confuse": [
+      "Saturation loss can have multiple independent causes — do not cite only one",
+      "Oil film yellowing affects perceived color but is distinct from glaze transparency change"
+    ],
+    "expected_answer_shape": "Multi-cause explanation covering: refractive index change as oil ages, dirt accumulation, varnish yellowing, and pigment instability; scoping which causes are well-evidenced vs. context-dependent.",
+    "gold_claims": [
+      "Refractive index of the oil binder changes as it ages and oxidizes, reducing transparency",
+      "Dirt and varnish accumulation reduce glaze luminosity",
+      "Some pigments used in glazes have known lightfastness or chemical instability issues"
+    ],
+    "known_uncertainties": [
+      "Degree of refractive index change varies by oil type and aging conditions",
+      "Relative contribution of each factor is difficult to isolate in specific paintings"
+    ],
+    "evaluation_notes": "Hard question requiring multi-cause synthesis. Penalize answers that give only one cause as universal. Conflict between sources on relative contributions should be disclosed.",
+    "must_include": [
+      "Refractive index change in aging oil",
+      "At least one additional cause (varnish, dirt, or pigment instability)"
+    ],
+    "required_distinctions": [
+      "Oil film change vs. varnish yellowing — different layers and different reversibility",
+      "Glaze transparency vs. paint film color shift"
+    ],
+    "must_not_say": [
+      "Glazes only lose saturation due to one cause"
+    ],
+    "uncertainty_handling": "Must disclose multi-factor complexity. Use mixed_evidence or likely_but_context_dependent for relative contribution claims.",
+    "citation_expectation": "Conservation literature (Tier 1) required for aging mechanism. Pigment reference (Tier 2) acceptable for pigment-specific claims.",
+    "failure_tags_if_wrong": ["UNCERTAINTY_COLLAPSED", "CASE_GENERALIZED", "CONFLICT_UNDISCLOSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-HIS-001",
+    "category": "HIS",
+    "question": "Would a 15th-century Flemish painter likely have used titanium white?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Art History"],
+    "expected_source_tiers": [1, 4],
+    "must_use_domains": ["pigment", "historical_practice"],
+    "must_not_confuse": [
+      "Titanium white was not available before the early 20th century — this is anachronistic",
+      "Do not confuse titanium white with lead white or natural gypsum grounds used historically"
+    ],
+    "expected_answer_shape": "Direct answer: no. Explanation of when titanium white was developed. Brief note on what whites were available in 15th-century Flemish practice (lead white, chalk).",
+    "gold_claims": [
+      "Titanium white was not commercially available until the early 20th century",
+      "15th-century Flemish painters used lead white (PW1/PW2) as their primary white",
+      "The question describes a historical anachronism"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "This is a historical anachronism question. Direct no required. Explanation of dating expected. No hedging on the anachronism.",
+    "must_include": [
+      "Titanium white was not available in the 15th century",
+      "Lead white was the primary white used in Flemish oil painting",
+      "Titanium white first commercially available in early 20th century"
+    ],
+    "required_distinctions": [
+      "titanium_white vs. lead_white — completely different historical periods"
+    ],
+    "must_not_say": [
+      "It is possible a 15th-century painter used titanium white",
+      "Titanium white has always been available"
+    ],
+    "uncertainty_handling": "No meaningful uncertainty here — this is a clear historical anachronism. Use historically_documented for lead white use.",
+    "citation_expectation": "Historical practice source (Tier 4) or conservation literature (Tier 1) for material use documentation.",
+    "failure_tags_if_wrong": ["HISTORICAL_ANACHRONISM", "FABRICATED_CITATION"]
+  },
+
+  {
+    "benchmark_id": "BMK-HIS-002",
+    "category": "HIS",
+    "question": "Was terre verte used in flesh shadow underpaintings, and is this historically grounded?",
+    "difficulty": "hard",
+    "status": "approved",
+    "target_modes": ["Art History", "Studio"],
+    "expected_source_tiers": [1, 4],
+    "must_use_domains": ["pigment", "historical_practice"],
+    "must_not_confuse": [
+      "This practice is documented for specific schools and periods — do not universalize",
+      "Terre verte as underpainting is distinct from terre verte as a final layer color"
+    ],
+    "expected_answer_shape": "Confirmation that this is historically documented in Italian and Northern European practice; scoping to specific periods and schools; note on the optical reasoning (cool shadow under warm flesh); caveat that not all painters used this technique.",
+    "gold_claims": [
+      "The use of terre verte underpaintings for flesh tones is documented in Italian and some Flemish/Northern European medieval and early Renaissance painting",
+      "The practice exploits the optical effect of the cool green showing through translucent flesh layers",
+      "Not universal — practice varies by painter, school, and period"
+    ],
+    "known_uncertainties": [
+      "Attribution of specific underpaint layers requires technical examination — not all examples are confirmed",
+      "Practice becomes less common in later periods as techniques evolved"
+    ],
+    "evaluation_notes": "Must confirm the practice as historically documented while scoping it to specific traditions. Penalize universal claims across all periods and schools.",
+    "must_include": [
+      "Historically documented in Italian and related Northern European painting",
+      "Scope to medieval / early Renaissance",
+      "Not universal — school and period specific"
+    ],
+    "required_distinctions": [
+      "Historically documented practice vs. universal rule",
+      "terre_verte as underpainting vs. terre_verte as surface color"
+    ],
+    "must_not_say": [
+      "All Renaissance painters used terre verte underpaintings",
+      "This practice is not documented"
+    ],
+    "uncertainty_handling": "Use historically_documented for confirmed uses. Use case_specific or uncertain for specific attributions where examination data is not cited.",
+    "citation_expectation": "Conservation literature (Tier 1) for technical examination evidence. Historical practice source (Tier 4) for documented accounts.",
+    "failure_tags_if_wrong": ["CASE_GENERALIZED", "HISTORICAL_ANACHRONISM", "FABRICATED_CITATION"]
+  },
+
+  {
+    "benchmark_id": "BMK-HIS-003",
+    "category": "HIS",
+    "question": "How did Northern European painters in the 17th century commonly structure their paint layers?",
+    "difficulty": "hard",
+    "status": "approved",
+    "target_modes": ["Art History"],
+    "expected_source_tiers": [1, 4],
+    "must_use_domains": ["historical_practice", "technique"],
+    "must_not_confuse": [
+      "17th-century Dutch practice differs from Flemish — do not conflate",
+      "Do not treat a documented approach by one master as universal to all Northern European painters",
+      "Technical examination findings are case-specific unless confirmed across multiple works"
+    ],
+    "expected_answer_shape": "Description of common layer structures in 17th-century Northern European oil painting (ground, imprimatura, dead color/grisaille, glaze, finishing layers); noting variation across painters and ateliers; citing evidence type as historical and conservation examination.",
+    "gold_claims": [
+      "Common structures include a prepared ground, an imprimatura or toned isolation layer, a dead-color or rough sketch layer, followed by glazes and final opaque passages",
+      "Dutch and Flemish painters in this period are documented using this layered approach in conservation examinations of surviving works",
+      "Individual variation is significant — documented approaches should not be universalized"
+    ],
+    "known_uncertainties": [
+      "Technical examination data varies by individual work and conservation access",
+      "Attribution of specific layer structures to 'standard practice' is necessarily schematic"
+    ],
+    "evaluation_notes": "Hard synthesis question. Expects reasonable accuracy on documented layer structures while maintaining case-specific scope. Penalize confident universalization without qualification.",
+    "must_include": [
+      "Reference to ground and imprimatura/toned isolation",
+      "Dead color or rough layer",
+      "Glazing strategy",
+      "Case-specific or school-specific scope qualification"
+    ],
+    "required_distinctions": [
+      "Documented technique vs. universal rule for all Northern European painters"
+    ],
+    "must_not_say": [
+      "All 17th-century Northern European painters used exactly the same layer structure"
+    ],
+    "uncertainty_handling": "Case-specific and historically_documented labels expected. Do not present single master's technique as universal.",
+    "citation_expectation": "Conservation literature (Tier 1) for technical examination. Historical practice source (Tier 4) for documented written accounts.",
+    "failure_tags_if_wrong": ["CASE_GENERALIZED", "HISTORICAL_ANACHRONISM", "FABRICATED_CITATION"]
+  },
+
+  {
+    "benchmark_id": "BMK-COL-001",
+    "category": "COL",
+    "question": "What is the difference between hue, value, and chroma?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Color Analysis"],
+    "expected_source_tiers": [5],
+    "must_use_domains": ["color_theory"],
+    "must_not_confuse": [
+      "Hue, value, and chroma are independent dimensions — do not conflate",
+      "Saturation and chroma are sometimes used interchangeably but have technical distinctions in some systems"
+    ],
+    "expected_answer_shape": "Clear definitions of all three dimensions; a brief example using a familiar color; note on why the distinction matters practically.",
+    "gold_claims": [
+      "Hue is the color identity (red, yellow, blue, etc.)",
+      "Value is the lightness or darkness of a color",
+      "Chroma is the purity or saturation of a color — how far from neutral grey"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "Fundamental terminology question. Definitions must be clear and correct. Practical example expected for full marks.",
+    "must_include": [
+      "Hue = color identity",
+      "Value = light/dark",
+      "Chroma = purity/saturation"
+    ],
+    "required_distinctions": [
+      "All three dimensions are independent — changing value does not change hue",
+      "Chroma vs. saturation — note if systems differ"
+    ],
+    "must_not_say": [
+      "Hue and value are the same thing",
+      "Chroma and value are interchangeable"
+    ],
+    "uncertainty_handling": "Well_established — no hedging required.",
+    "citation_expectation": "Color theory reference (Tier 5). Munsell or similar system acceptable.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-COL-002",
+    "category": "COL",
+    "question": "Why can complementary color mixtures go grey or muddy instead of vibrant?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Color Analysis", "Studio"],
+    "expected_source_tiers": [2, 5],
+    "must_use_domains": ["color_theory", "pigment"],
+    "must_not_confuse": [
+      "Subtractive mixing (pigments) behaves differently from additive mixing (light)",
+      "Optical mixing at a distance is different from physical mixture on the palette"
+    ],
+    "expected_answer_shape": "Explanation of subtractive color mixing and why complements cancel chroma; note that real pigments have broad spectral absorption curves that cause over-cancellation; practical implication for keeping mixtures clean.",
+    "gold_claims": [
+      "Complementary pigments absorb each other's reflected light, reducing overall saturation",
+      "Real pigments have broad spectral absorption — complements mixed physically often absorb across most of the visible spectrum, producing grey or brown",
+      "Adding complements is a tool for reducing chroma, not for producing a neutral grey in most cases"
+    ],
+    "known_uncertainties": [
+      "Exact behavior varies by specific pigment pair — some complements mix to cleaner neutrals than others"
+    ],
+    "evaluation_notes": "Subtractive mixing mechanism must be explained. Pigment spectral behavior is the key technical explanation. Do not oversimplify to 'they cancel out.'",
+    "must_include": [
+      "Subtractive mixing principle",
+      "Broad spectral absorption of real pigments",
+      "Practical result: muddy or grey, not vibrant"
+    ],
+    "required_distinctions": [
+      "Subtractive (pigment) mixing vs. additive (light) mixing",
+      "Optical complementary vs. practical pigment mixing result"
+    ],
+    "must_not_say": [
+      "Complementary colors always mix to a perfect neutral",
+      "The result is just about proportion — any complement pair gives the same neutralizing effect"
+    ],
+    "uncertainty_handling": "Exact behavior of specific pairs is likely_but_context_dependent. Core mechanism is well_established.",
+    "citation_expectation": "Color theory reference (Tier 5). Pigment reference (Tier 2) for spectral absorption if cited.",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-PRD-001",
+    "category": "PRD",
+    "question": "How can two oil paints with the same pigment code behave differently?",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Product Comparison", "Studio"],
+    "expected_source_tiers": [3],
+    "must_use_domains": ["product", "pigment"],
+    "must_not_confuse": [
+      "Pigment code does not fully determine product behavior — formulation matters",
+      "Do not treat a claim about one brand as universal to all products with the same code"
+    ],
+    "expected_answer_shape": "Explanation of why same-pigment-code paints differ: oil type, pigment particle size and grade, pigment load, additives, and grinding method all vary across manufacturers.",
+    "gold_claims": [
+      "Same pigment code does not mean same formulation",
+      "Oil type (linseed, safflower, walnut) varies across products with the same pigment",
+      "Pigment particle size and grade vary — affects opacity, tinting strength, and handling",
+      "Pigment load (pigment-to-binder ratio) varies — affects color saturation and drying",
+      "Additives (waxes, driers, fillers) may be present in some formulations and not others"
+    ],
+    "known_uncertainties": [
+      "Specific formulation details are often not fully disclosed by manufacturers"
+    ],
+    "evaluation_notes": "Must explain multiple variables beyond just pigment code. Product-specific label required. Must not treat any one product's properties as defining for the pigment.",
+    "must_include": [
+      "Oil vehicle varies",
+      "Pigment particle size or grade varies",
+      "Pigment load varies",
+      "Additives may differ"
+    ],
+    "required_distinctions": [
+      "Pigment code vs. complete formulation — code alone does not determine behavior",
+      "Product-specific claims vs. general pigment chemistry"
+    ],
+    "must_not_say": [
+      "All paints with the same pigment code behave identically"
+    ],
+    "uncertainty_handling": "Specific claims about undisclosed formulations should be labeled uncertain or product_specific.",
+    "citation_expectation": "Manufacturer TDS (Tier 3). Pigment reference (Tier 2) for underlying chemistry.",
+    "failure_tags_if_wrong": ["PRODUCT_UNIVERSALIZED", "SCOPE_MISMATCH"]
+  },
+
+  {
+    "benchmark_id": "BMK-PRD-002",
+    "category": "PRD",
+    "question": "Compare a professional-grade and a student-grade zinc white oil paint for drying and handling.",
+    "difficulty": "medium",
+    "status": "approved",
+    "target_modes": ["Product Comparison", "Studio"],
+    "expected_source_tiers": [3],
+    "must_use_domains": ["product", "pigment"],
+    "must_not_confuse": [
+      "Student and professional grade are not just price differences — formulation differences are real",
+      "Claims about one specific brand must not be generalized to all student or professional grade products"
+    ],
+    "expected_answer_shape": "Comparison on: pigment load, oil vehicle, possible additives and fillers, typical handling differences, and how these affect drying. Clear labeling of product-specific claims.",
+    "gold_claims": [
+      "Professional grade typically has higher pigment load and purer binder",
+      "Student grade often contains extenders, fillers, or substitute binders that affect handling and drying",
+      "Drying behavior is influenced by oil type and pigment load differences between grades"
+    ],
+    "known_uncertainties": [
+      "Specific formulations vary across brands within the same grade label",
+      "Manufacturer TDS details are not always complete"
+    ],
+    "evaluation_notes": "Product_specific label required throughout. Must not generalize from one brand to all products. Drying comparison must be tied to formulation differences.",
+    "must_include": [
+      "Pigment load difference between grades",
+      "Potential extenders or fillers in student grade",
+      "Impact on drying and handling behavior"
+    ],
+    "required_distinctions": [
+      "Grade label vs. actual formulation — grade is a general indicator",
+      "Product-specific claims vs. universal zinc white properties"
+    ],
+    "must_not_say": [
+      "All student grade zinc whites are identical",
+      "Professional grade zinc white always dries faster than student grade"
+    ],
+    "uncertainty_handling": "Use product_specific throughout. Formulation-dependent claims require likely_but_context_dependent.",
+    "citation_expectation": "Manufacturer TDS (Tier 3) for specific product claims.",
+    "failure_tags_if_wrong": ["PRODUCT_UNIVERSALIZED", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-TRM-001",
+    "category": "TRM",
+    "question": "What is the difference between opacity and tinting strength in oil paint?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Studio", "Color Analysis"],
+    "expected_source_tiers": [2, 3],
+    "must_use_domains": ["pigment", "color_theory"],
+    "must_not_confuse": [
+      "Opacity and tinting strength are independent properties — a pigment can be transparent but high in tinting strength",
+      "Tinting strength is not the same as chroma"
+    ],
+    "expected_answer_shape": "Clear definitions of opacity (ability to block passage of light) and tinting strength (ability to influence a mixture); a note that the two are independent; practical examples.",
+    "gold_claims": [
+      "Opacity refers to a pigment's ability to block the passage of light and conceal what is beneath",
+      "Tinting strength refers to a pigment's ability to influence the color of a mixture",
+      "A pigment can be transparent (low opacity) yet have high tinting strength (e.g. phthalocyanine blues)"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "Both definitions must be accurate and clearly distinct. Independence of the two properties is the key insight. Practical example increases score.",
+    "must_include": [
+      "Opacity = light blocking / concealing",
+      "Tinting strength = influence on mixture",
+      "They are independent properties"
+    ],
+    "required_distinctions": [
+      "opacity vs. tinting strength — not the same property",
+      "transparency does not imply low tinting strength"
+    ],
+    "must_not_say": [
+      "Opacity and tinting strength are the same thing",
+      "More opaque always means higher tinting strength"
+    ],
+    "uncertainty_handling": "Well_established — no hedging required.",
+    "citation_expectation": "Pigment reference (Tier 2) or manufacturer TDS (Tier 3).",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  },
+
+  {
+    "benchmark_id": "BMK-TRM-002",
+    "category": "TRM",
+    "question": "What is the difference between a glaze and a scumble in oil painting?",
+    "difficulty": "easy",
+    "status": "approved",
+    "target_modes": ["Studio"],
+    "expected_source_tiers": [2, 5],
+    "must_use_domains": ["technique", "color_theory"],
+    "must_not_confuse": [
+      "Glaze and scumble are both translucent layer techniques but work on different principles",
+      "Do not conflate glazing with washing (watercolor-style dilution)"
+    ],
+    "expected_answer_shape": "Definition of glaze as a transparent dark layer over a lighter ground; definition of scumble as a thin opaque or semi-opaque lighter layer over a darker ground; practical use of each.",
+    "gold_claims": [
+      "A glaze is a thin, transparent paint layer applied over a lighter dried layer; the luminosity comes from light reflecting off the lower layer",
+      "A scumble is a thin, semi-opaque or broken layer of lighter paint over a darker ground, creating atmospheric or optical effects",
+      "Glazes are typically dark over light; scumbles are typically light over dark"
+    ],
+    "known_uncertainties": [],
+    "evaluation_notes": "Both terms must be clearly defined and distinguished. Light-over-dark vs. dark-over-light distinction is central. Practical application of each improves score.",
+    "must_include": [
+      "Glaze = transparent, dark over light",
+      "Scumble = semi-opaque, light over dark",
+      "Different optical mechanism for each"
+    ],
+    "required_distinctions": [
+      "glaze vs. scumble — different tonal and optical principles"
+    ],
+    "must_not_say": [
+      "Glaze and scumble are interchangeable terms"
+    ],
+    "uncertainty_handling": "Well_established — no hedging required.",
+    "citation_expectation": "Color theory reference (Tier 5) or pigment/technique reference (Tier 2).",
+    "failure_tags_if_wrong": ["SCOPE_MISMATCH", "UNCERTAINTY_COLLAPSED"]
+  }
+]

@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "schema_id": "field_provenance_schema",
+    "version": "v1.0",
+    "description": "Schema for per-field provenance records in the Oil Painting Research Assistant. One provenance record per metadata field per entity (source or chunk). Tracks how each field value was determined, by what method, with what confidence, and whether it has been reviewed or overridden.",
+    "storage_note": "Provenance records are stored in the metadata store, not in ChromaDB. They are keyed by entity_id + field_name."
+  },
+
+  "fields": {
+
+    "provenance_id": {
+      "type": "string",
+      "required": true,
+      "format": "PRV-{entity_id}-{field_name}",
+      "example": "PRV-SRC-MUS-001-trust_tier",
+      "description": "Unique provenance record ID. Constructed from entity ID and field name."
+    },
+
+    "entity_type": {
+      "type": "string",
+      "required": true,
+      "enum": ["source", "chunk"],
+      "description": "Whether this provenance record belongs to a source or a chunk."
+    },
+
+    "entity_id": {
+      "type": "string",
+      "required": true,
+      "description": "The source_id or chunk_id of the entity this provenance record belongs to."
+    },
+
+    "field_name": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the metadata field this provenance record tracks."
+    },
+
+    "value": {
+      "type": "any",
+      "required": true,
+      "description": "The current value of the field at the time this provenance record was written. May be string, integer, boolean, array, or null depending on the field."
+    },
+
+    "provenance_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.provenance_type",
+      "description": "How the field value was determined."
+    },
+
+    "provenance_method": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.provenance_method",
+      "description": "The specific method or tool used to determine the value."
+    },
+
+    "confidence": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.confidence_level",
+      "description": "Confidence level in the accuracy of this field value."
+    },
+
+    "review_status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.review_status",
+      "description": "Whether a human has reviewed this field value."
+    },
+
+    "override_status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.override_status",
+      "description": "Whether this field value has been manually overridden from an earlier value."
+    },
+
+    "original_value": {
+      "type": "any",
+      "required": false,
+      "description": "The value before any manual override. Populated only when override_status is 'overridden'."
+    },
+
+    "last_updated_at": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 datetime",
+      "example": "2025-03-09T14:32:00Z",
+      "description": "Timestamp when this provenance record was last written or updated."
+    },
+
+    "last_updated_by": {
+      "type": "string",
+      "required": true,
+      "description": "Identifier of the agent or reviewer who last wrote or updated this record. May be a username, script name, or model identifier."
+    },
+
+    "notes": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Optional notes on why the value was set this way, why it was overridden, or any relevant context."
+    }
+  }
+}

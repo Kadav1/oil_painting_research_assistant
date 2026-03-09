@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "schema_id": "conflict_record_schema",
+    "version": "v1.0",
+    "description": "Schema for a conflict record in the Oil Painting Research Assistant. A conflict record logs a known disagreement between two or more sources or chunks on a factual, historical, or scope-related claim. Conflict records drive disclosure behavior in answer generation.",
+    "log_file": "data/logs/conflict_log.csv"
+  },
+
+  "fields": {
+
+    "conflict_id": {
+      "type": "string",
+      "required": true,
+      "format": "CON-{NNN}",
+      "example": "CON-001",
+      "description": "Unique conflict record ID. Assigned when the conflict is first logged."
+    },
+
+    "conflict_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.conflict_type",
+      "description": "The type of conflict."
+    },
+
+    "entity_type": {
+      "type": "string",
+      "required": true,
+      "enum": ["source", "chunk", "mixed"],
+      "description": "Whether the conflict is between source records, chunk records, or a mix."
+    },
+
+    "entity_ids": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "min_items": 2,
+      "description": "IDs of the sources or chunks in conflict. May be source_ids, chunk_ids, or a mix."
+    },
+
+    "topic": {
+      "type": "string",
+      "required": true,
+      "description": "Short label for the topic or claim in conflict. Used for indexing and search.",
+      "example": "zinc_white_brittleness_risk"
+    },
+
+    "summary": {
+      "type": "string",
+      "required": true,
+      "description": "Description of the conflict: what each source claims, and why they disagree."
+    },
+
+    "requires_answer_disclosure": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether answers to questions touching this conflict must explicitly disclose the conflict to the user."
+    },
+
+    "resolution_status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.resolution_status",
+      "description": "Current resolution state of the conflict."
+    },
+
+    "preferred_value_or_source": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "If the conflict is resolved with a preferred source or value, identify it here. Null if unresolved or if both are disclosed."
+    },
+
+    "resolution_reason": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Explanation of how and why the resolution was reached. Required when resolution_status is resolved_with_preferred."
+    },
+
+    "reviewer": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Username or identifier of the reviewer who resolved or assessed the conflict. Null if unreviewed."
+    },
+
+    "reviewed_at": {
+      "type": ["string", "null"],
+      "required": false,
+      "format": "ISO 8601 datetime",
+      "description": "Timestamp when the conflict was last reviewed. Null if unreviewed."
+    },
+
+    "created_at": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 datetime",
+      "description": "Timestamp when the conflict record was first created."
+    },
+
+    "notes": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Optional additional context about the conflict or resolution process."
+    }
+  }
+}

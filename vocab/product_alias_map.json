@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "schema_id": "product_alias_map",
+    "version": "v1.0",
+    "description": "Starter structure for mapping product-line naming variants in the Oil Painting Research Assistant. This file is intentionally lighter than material_alias_map.json. It defines the canonical pattern for product family mapping and contains a starter set. It will grow as manufacturer TDS documents are ingested.",
+    "growth_note": "Add entries as manufacturer sources are ingested. Do not invent product-specific data not present in ingested TDS or catalog sources."
+  },
+
+  "product_families": [
+    {
+      "brand": "Winsor & Newton",
+      "line": "Artists' Oil Colour",
+      "canonical_product_family": "winsor_newton_artists_oil",
+      "aliases": [
+        "W&N Artists' Oil",
+        "Winsor & Newton Artists Oil",
+        "W&N Artists Oil Colour"
+      ],
+      "notes": "Professional-grade line. Distinguishable from Winsor & Newton Winton (student grade)."
+    },
+    {
+      "brand": "Winsor & Newton",
+      "line": "Winton Oil Colour",
+      "canonical_product_family": "winsor_newton_winton",
+      "aliases": [
+        "Winton",
+        "W&N Winton",
+        "Winsor & Newton Winton"
+      ],
+      "notes": "Student-grade line. Must not be conflated with Artists' Oil in product comparison contexts."
+    },
+    {
+      "brand": "Old Holland",
+      "line": "Classic Oil Colours",
+      "canonical_product_family": "old_holland_classic",
+      "aliases": [
+        "Old Holland Classic",
+        "Old Holland Oil"
+      ],
+      "notes": "High oil-to-pigment ratio line. Properties may differ substantially from other brands carrying same pigment code."
+    },
+    {
+      "brand": "Gamblin",
+      "line": "Artist's Oil Colors",
+      "canonical_product_family": "gamblin_artists_oil",
+      "aliases": [
+        "Gamblin Artist's Oil",
+        "Gamblin Oil"
+      ],
+      "notes": "Professional line from Gamblin. Known for conservation-conscious formulations."
+    },
+    {
+      "brand": "Gamblin",
+      "line": "1980 Oil Colors",
+      "canonical_product_family": "gamblin_1980",
+      "aliases": [
+        "Gamblin 1980"
+      ],
+      "notes": "Student-grade line. Must not be conflated with Gamblin Artist's Oil in product comparison contexts."
+    },
+    {
+      "brand": "Williamsburg",
+      "line": "Handmade Oil Colors",
+      "canonical_product_family": "williamsburg_handmade",
+      "aliases": [
+        "Williamsburg Oil",
+        "Williamsburg Handmade"
+      ],
+      "notes": "Hand-ground line. High pigment load. Properties may differ from machine-ground paints."
+    },
+    {
+      "brand": "Rublev Colours",
+      "line": "Artist Oil Colors",
+      "canonical_product_family": "rublev_artist_oil",
+      "aliases": [
+        "Rublev Oil",
+        "Natural Pigments Rublev"
+      ],
+      "notes": "Natural Pigments brand. Focus on historical pigments and oil types."
+    },
+    {
+      "brand": "Michael Harding",
+      "line": "Artist Oil Colours",
+      "canonical_product_family": "michael_harding_oil",
+      "aliases": [
+        "Harding Oil",
+        "Michael Harding"
+      ],
+      "notes": "High pigment concentration. Handmade in UK."
+    }
+  ]
+}

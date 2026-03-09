@@ -1,0 +1,154 @@
+{
+  "_meta": {
+    "schema_id": "benchmark_template",
+    "version": "v1.0",
+    "description": "JSON Schema definition for a benchmark record in the Oil Painting Research Assistant. All benchmark records in benchmark_gold_set_v1.json must conform to this structure. All enum values must match controlled_vocabulary.json."
+  },
+
+  "fields": {
+
+    "benchmark_id": {
+      "type": "string",
+      "required": true,
+      "format": "BMK-{CATEGORY_CODE}-{NNN}",
+      "example": "BMK-PIG-001",
+      "description": "Unique benchmark ID. Assigned when the record is first authored. Never changed."
+    },
+
+    "category": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.benchmark_category",
+      "description": "Benchmark category code."
+    },
+
+    "question": {
+      "type": "string",
+      "required": true,
+      "description": "The user-style question, phrased as a real user would ask it."
+    },
+
+    "difficulty": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.benchmark_difficulty",
+      "description": "Question difficulty level."
+    },
+
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.benchmark_status",
+      "description": "Review state of this benchmark record."
+    },
+
+    "target_modes": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.answer_mode",
+      "description": "Answer modes the question is expected to activate. A question may target multiple modes."
+    },
+
+    "expected_source_tiers": {
+      "type": "array",
+      "items": "integer",
+      "required": true,
+      "description": "Source trust tiers expected to dominate the answer (1–5)."
+    },
+
+    "must_use_domains": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.domain",
+      "description": "Domains that must be represented in a correct answer."
+    },
+
+    "must_not_confuse": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Known confusion traps this question is designed to expose. Named explicitly."
+    },
+
+    "expected_answer_shape": {
+      "type": "string",
+      "required": true,
+      "description": "Description of what a correct, well-formed answer should contain."
+    },
+
+    "gold_claims": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Core factual claims that a correct answer must include or be consistent with."
+    },
+
+    "known_uncertainties": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Areas where the answer should hedge or acknowledge uncertainty."
+    },
+
+    "evaluation_notes": {
+      "type": "string",
+      "required": true,
+      "description": "Guidance for human evaluators: what to look for, what to penalize."
+    },
+
+    "must_include": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Specific facts, distinctions, or framings that must appear in a passing answer."
+    },
+
+    "required_distinctions": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Distinctions between materials, sources, scope levels, or concepts that the answer must preserve."
+    },
+
+    "must_not_say": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Statements or framings that constitute a benchmark failure if present in the answer."
+    },
+
+    "uncertainty_handling": {
+      "type": "string",
+      "required": true,
+      "description": "How the answer should handle uncertainty: what to hedge, where to disclose, which labels to use."
+    },
+
+    "citation_expectation": {
+      "type": "string",
+      "required": true,
+      "description": "What source types or tiers should be cited, and how citations should be attributed."
+    },
+
+    "failure_tags_if_wrong": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Failure taxonomy codes from benchmark_template.md §9 that apply if the answer fails this benchmark."
+    }
+  },
+
+  "scoring_dimensions": {
+    "_description": "Six dimensions used to score each benchmark answer. Each rated 1–5. Pass threshold: average >= 4.0, no Accuracy or Source Fitness below 3.",
+    "dimensions": [
+      {"name": "Accuracy", "weight": "critical", "floor": 3},
+      {"name": "Source Fitness", "weight": "critical", "floor": 3},
+      {"name": "Usefulness", "weight": "standard", "floor": null},
+      {"name": "Uncertainty Handling", "weight": "standard", "floor": null},
+      {"name": "Distinction Quality", "weight": "standard", "floor": null},
+      {"name": "Citation Readiness", "weight": "standard", "floor": null}
+    ],
+    "pass_threshold_average": 4.0
+  }
+}

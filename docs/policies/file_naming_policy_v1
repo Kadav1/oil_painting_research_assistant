@@ -1,0 +1,895 @@
+# File Naming Policy v1.0
+
+## Oil Painting Research Assistant
+
+**Document ID:** OPRA-POL-008
+**Version:** v1.0
+**Status:** Canonical Draft
+**Scope:** File names, IDs, stems, version tags, review artifacts, and folder-level naming conventions
+**Applies to:** All documents, schemas, vocabulary files, benchmark files, raw sources, normalized files, chunk files, logs, and generated artifacts in the Oil Painting Research Assistant project
+
+---
+
+# 1. Purpose
+
+This document defines the canonical naming scheme for files in the Oil Painting Research Assistant project.
+
+Its purpose is to ensure that files are:
+
+* predictable
+* machine-readable
+* human-scannable
+* sortable
+* versionable
+* audit-friendly
+* compatible with ingestion, review, retrieval, and maintenance workflows
+
+This policy expands the naming logic already implied in the Foundation Pack and companion governance documents.
+
+---
+
+# 2. Core Principle
+
+A filename should tell you, at minimum:
+
+1. what the artifact is
+2. what entity it belongs to
+3. what version or snapshot it represents
+4. whether it is raw, clean, metadata, chunked, reviewed, or derived
+
+Filenames should not depend on memory, intuition, or folder context alone.
+
+---
+
+# 3. Naming Objectives
+
+This naming scheme is designed to achieve seven things:
+
+## 3.1 Consistency
+
+Files of the same class should look alike.
+
+## 3.2 Sortability
+
+Names should sort cleanly in file explorers and scripts.
+
+## 3.3 Auditability
+
+A reviewer should be able to map a file back to its source or workflow stage.
+
+## 3.4 Scriptability
+
+Code should be able to parse filenames safely.
+
+## 3.5 Stability
+
+Names should avoid unnecessary churn once assigned.
+
+## 3.6 Readability
+
+Names should remain intelligible to humans.
+
+## 3.7 Separation of concerns
+
+Human governance docs, machine schemas, corpus files, and logs should not share one undifferentiated naming style.
+
+---
+
+# 4. General Naming Rules
+
+## 4.1 Allowed characters
+
+Use only:
+
+* lowercase letters `a-z`
+* uppercase letters `A-Z` only for IDs/prefixes where specified
+* digits `0-9`
+* underscores `_`
+* hyphens `-` only when explicitly allowed in version tags or dates
+
+Avoid:
+
+* spaces
+* parentheses
+* commas
+* ampersands
+* slashes
+* special punctuation
+* accented characters in filenames
+
+## 4.2 Preferred case
+
+Use:
+
+* **snake_case** for most file names
+* **UPPERCASE prefixes** for IDs only where policy requires them
+* lowercase extensions
+
+## 4.3 Date format
+
+Use ISO style:
+
+* `YYYY-MM-DD` for human-readable date tags
+* `YYYYMMDD` if compact machine-friendly form is preferred for a file class
+
+Do not use locale-dependent date formats like:
+
+* `03-08-26`
+* `8_3_26`
+* `March_8`
+
+## 4.4 Version format
+
+Use:
+
+* `v1`
+* `v1.0`
+* `v1.1`
+* `v1.0.1`
+
+For filenames, prefer:
+
+* `v1`
+* `v1_0`
+* `v1_1`
+* `v1_0_1`
+
+to avoid ambiguity in scripts.
+
+---
+
+# 5. Top-Level File Classes
+
+This project has six naming families:
+
+1. **governance docs**
+2. **foundation docs**
+3. **schemas**
+4. **vocabulary resources**
+5. **benchmark assets**
+6. **corpus/data artifacts**
+
+Each family should use a slightly different naming pattern.
+
+---
+
+# 6. Governance and Policy Documents
+
+These live in `docs/policies/`.
+
+## 6.1 Pattern
+
+```text
+<policy_name>.md
+```
+
+## 6.2 Examples
+
+* `source_acquisition_policy.md`
+* `metadata_provenance_rules.md`
+* `deduplication_policy.md`
+* `conflict_resolution_policy.md`
+* `review_workflow.md`
+* `retrieval_policy_v1.md`
+* `answer_labeling_standard.md`
+* `file_naming_policy.md`
+
+## 6.3 Rule
+
+Use descriptive names, not opaque IDs, for policy filenames.
+
+The policy’s internal header should carry:
+
+* document ID
+* version
+* status
+
+The filename itself should remain stable unless the policy meaning changes materially.
+
+## 6.4 Versioning rule
+
+Minor revisions should usually update the internal version number, not the filename.
+
+Example:
+
+* keep `source_acquisition_policy.md`
+* update internal version from `v1.0` to `v1.1`
+
+Use filename version suffixes only when parallel versions must coexist.
+
+Example:
+
+* `retrieval_policy_v1.md`
+* `retrieval_policy_v2.md`
+
+---
+
+# 7. Foundation Documents
+
+These live in `docs/foundation/`.
+
+## 7.1 Pattern
+
+```text
+<foundation_artifact_name>.md
+```
+
+## 7.2 Examples
+
+* `FOUNDATION_PACK_v1.md`
+* `source_hierarchy.md`
+* `metadata_schema.md`
+* `controlled_vocabulary.md`
+* `chunking_rules.md`
+* `benchmark_template.md`
+* `system_prompt_v1.md`
+
+## 7.3 Rule
+
+The umbrella pack may use uppercase emphasis if it is the canonical master document.
+
+Example:
+
+* `FOUNDATION_PACK_v1.md`
+
+Subdocuments should remain lowercase snake_case.
+
+---
+
+# 8. Schema Files
+
+These live in `schemas/`.
+
+## 8.1 Pattern
+
+```text
+<artifact_name>_schema.json
+```
+
+## 8.2 Examples
+
+* `source_register_schema.json`
+* `chunk_schema.json`
+* `field_provenance_schema.json`
+* `duplicate_cluster_schema.json`
+* `conflict_record_schema.json`
+* `review_record_schema.json`
+* `approval_state_schema.json`
+* `context_package_schema.json`
+* `retrieval_trace_schema.json`
+* `answer_label_schema.json`
+
+## 8.3 Rule
+
+Use singular names for one record shape unless the schema describes an explicit collection format.
+
+---
+
+# 9. Vocabulary and Mapping Files
+
+These live in `vocab/`.
+
+## 9.1 Pattern
+
+```text
+<lemma_or_resource_name>.json
+```
+
+## 9.2 Examples
+
+* `material_alias_map.json`
+* `controlled_vocabulary.json`
+* `restriction_flags.json`
+* `product_alias_map.json`
+* `material_ontology_v1.json`
+
+## 9.3 Rule
+
+Use:
+
+* `*_map.json` for alias/synonym mappings
+* `*_vocabulary.json` for controlled term sets
+* `*_ontology.json` for relationship graphs
+
+---
+
+# 10. Benchmark Files
+
+These live in `benchmarks/`.
+
+## 10.1 Pattern
+
+```text
+<benchmark_artifact_name>.json
+```
+
+## 10.2 Examples
+
+* `benchmark_template.json`
+* `benchmark_gold_set_v1.json`
+* `benchmark_runs/`
+
+## 10.3 Benchmark run naming
+
+For generated benchmark run outputs, use:
+
+```text
+benchmark_run_<YYYY-MM-DD>_<run_id>.json
+```
+
+Example:
+
+* `benchmark_run_2026-03-08_run001.json`
+
+Or if model/config needs to be encoded:
+
+* `benchmark_run_2026-03-08_local_v1_run001.json`
+
+---
+
+# 11. Source IDs
+
+Every source must have a canonical source ID.
+
+## 11.1 Pattern
+
+```text
+SRC-<FAMILY>-<NNN>
+```
+
+## 11.2 Allowed family codes
+
+* `MUS` = museum_conservation
+* `PIG` = pigment_reference
+* `MFR` = manufacturer
+* `COL` = color_theory
+* `HIS` = historical_practice
+* `SCI` = scientific_paper
+
+## 11.3 Examples
+
+* `SRC-MUS-001`
+* `SRC-PIG-014`
+* `SRC-MFR-032`
+* `SRC-COL-005`
+
+## 11.4 Rule
+
+Source IDs are permanent once assigned.
+
+Do not recycle IDs if a source is rejected or superseded.
+
+---
+
+# 12. Chunk IDs
+
+Every chunk must have a canonical chunk ID.
+
+## 12.1 Pattern
+
+```text
+CHK-<SOURCE_ID>-<NNN>
+```
+
+## 12.2 Examples
+
+* `CHK-SRC-MUS-001-001`
+* `CHK-SRC-MFR-004-002`
+
+## 12.3 Rule
+
+Chunk numbering should be sequential within the source.
+
+If rechunking occurs, either:
+
+* regenerate the full chunk set and version the chunk artifacts
+  or
+* preserve old chunk metadata in history and promote the new chunk set clearly
+
+Do not silently reuse old chunk IDs for semantically different chunk boundaries.
+
+---
+
+# 13. Raw Source Files
+
+These live in `data/raw/...`
+
+## 13.1 Pattern
+
+```text
+<SOURCE_ID>_<short_source_stem>.<ext>
+```
+
+## 13.2 Examples
+
+* `SRC-MUS-001_smalt_degradation.pdf`
+* `SRC-MFR-004_williamsburg_zinc_white.html`
+* `SRC-COL-001_munsell_value.html`
+
+## 13.3 Source stem rules
+
+The short source stem should be:
+
+* lowercase
+* concise
+* descriptive
+* stable
+
+Avoid overlong stems.
+
+Good:
+
+* `smalt_degradation`
+* `zinc_white`
+* `munsell_value`
+
+Bad:
+
+* `this_is_the_full_title_of_the_document_with_extra_words`
+
+## 13.4 Snapshot rule for time-sensitive sources
+
+For product pages and changing web sources, use:
+
+```text
+<SOURCE_ID>_<short_source_stem>_<YYYY-MM-DD>.<ext>
+```
+
+Example:
+
+* `SRC-MFR-004_williamsburg_zinc_white_2026-03-08.html`
+
+Use this when multiple captures of the same source will coexist.
+
+---
+
+# 14. Clean / Normalized Files
+
+These live in `data/clean/...`
+
+## 14.1 Markdown normalization
+
+```text
+<SOURCE_ID>_<short_source_stem>.md
+```
+
+Example:
+
+* `SRC-MUS-001_smalt_degradation.md`
+
+## 14.2 Extracted tables
+
+Use:
+
+```text
+<SOURCE_ID>_<short_source_stem>_tables.json
+```
+
+or
+
+```text
+<SOURCE_ID>_<short_source_stem>_table_<NN>.csv
+```
+
+Examples:
+
+* `SRC-MUS-001_smalt_degradation_tables.json`
+* `SRC-MFR-004_williamsburg_zinc_white_table_01.csv`
+
+## 14.3 Metadata sidecar
+
+Use:
+
+```text
+<SOURCE_ID>.json
+```
+
+Example:
+
+* `SRC-MUS-001.json`
+
+Rule:
+Source metadata should not depend on the text stem. The ID is the stable identity.
+
+---
+
+# 15. Chunk Files
+
+These live in `data/chunks/...`
+
+## 15.1 Chunk text files
+
+```text
+<CHUNK_ID>.md
+```
+
+Example:
+
+* `CHK-SRC-MUS-001-001.md`
+
+## 15.2 Chunk metadata files
+
+```text
+<CHUNK_ID>.json
+```
+
+Example:
+
+* `CHK-SRC-MUS-001-001.json`
+
+## 15.3 Chunk table files
+
+If a chunk is table-based:
+
+```text
+<CHUNK_ID>_table.csv
+```
+
+Example:
+
+* `CHK-SRC-MFR-004-002_table.csv`
+
+---
+
+# 16. Register and Log Files
+
+These live in `data/register/` and `data/logs/`.
+
+## 16.1 Canonical register names
+
+Use stable filenames:
+
+* `source_register.csv`
+* `acquisition_log.csv`
+* `qa_log.csv`
+* `source_review_log.csv`
+* `metadata_review_log.csv`
+* `chunk_review_log.csv`
+* `duplicate_review_log.csv`
+* `conflict_review_log.csv`
+* `release_approval_log.csv`
+
+## 16.2 Rule
+
+These are rolling operational files, not per-run artifacts.
+
+If historical snapshots are needed, place them in an archive folder using date tags.
+
+Example:
+
+* `archive/source_register_2026-03-08.csv`
+
+---
+
+# 17. Similarity, Conflict, and Debug Reports
+
+These live in `data/logs/`.
+
+## 17.1 Pattern
+
+```text
+<report_name>.json
+```
+
+Stable examples:
+
+* `source_similarity_report.json`
+* `chunk_similarity_report.json`
+* `open_conflicts_report.json`
+* `retrieval_debug_report.json`
+* `recheck_queue.json`
+
+## 17.2 Snapshot pattern
+
+If multiple dated snapshots are needed:
+
+```text
+<report_name>_<YYYY-MM-DD>.json
+```
+
+Example:
+
+* `open_conflicts_report_2026-03-08.json`
+
+---
+
+# 18. Benchmark Run, Retrieval Run, and Evaluation Outputs
+
+These live in run-specific folders.
+
+## 18.1 Retrieval traces
+
+Use:
+
+```text
+retrieval_trace_<YYYY-MM-DD>_<run_id>.json
+```
+
+Example:
+
+* `retrieval_trace_2026-03-08_run014.json`
+
+## 18.2 Evaluation results
+
+Use:
+
+```text
+evaluation_run_<YYYY-MM-DD>_<run_id>.json
+```
+
+## 18.3 Failure logs
+
+Use:
+
+```text
+failure_log_<YYYY-MM-DD>_<run_id>.csv
+```
+
+---
+
+# 19. Review Record Files
+
+If review records are stored as individual JSON files instead of only in CSV logs, use:
+
+## 19.1 Pattern
+
+```text
+REV-<ENTITY_TYPE>-<ENTITY_ID>-<NNN>.json
+```
+
+Examples:
+
+* `REV-SOURCE-SRC-MUS-001-001.json`
+* `REV-CHUNK-CHK-SRC-MUS-001-001-001.json`
+
+## 19.2 Rule
+
+Use sequential review numbers per entity.
+
+---
+
+# 20. Conflict Record Files
+
+If conflict records are stored individually:
+
+## 20.1 Pattern
+
+```text
+CONFLICT-<NNN>.json
+```
+
+Example:
+
+* `CONFLICT-001.json`
+
+If grouped by entity:
+
+* `CONFLICT-SRC-MFR-004-001.json`
+
+---
+
+# 21. Duplicate Cluster Files
+
+If duplicate clusters are stored individually:
+
+## 21.1 Pattern
+
+```text
+DCL-<NNN>.json
+```
+
+Example:
+
+* `DCL-001.json`
+
+Or entity-aware:
+
+* `DCL-SOURCE-001.json`
+* `DCL-CHUNK-014.json`
+
+---
+
+# 22. Code Files
+
+These live in `src/`.
+
+## 22.1 Rule
+
+Use standard Python naming:
+
+* lowercase
+* snake_case
+* descriptive module names
+
+Examples:
+
+* `chunker.py`
+* `hybrid_retriever.py`
+* `citation_assembler.py`
+* `benchmark_runner.py`
+
+Avoid:
+
+* `helper.py`
+* `misc.py`
+* `temp2.py`
+* `new_version.py`
+
+---
+
+# 23. Temporary and Experimental Files
+
+These should never be mixed into canonical folders without clear naming.
+
+## 23.1 Pattern
+
+Use a dedicated prefix:
+
+* `tmp_`
+* `draft_`
+* `exp_`
+
+Examples:
+
+* `tmp_source_parse_test.json`
+* `draft_reranking_weights.json`
+* `exp_chunk_similarity_run03.json`
+
+## 23.2 Rule
+
+Temporary and experimental files must live in:
+
+* `tmp/`
+* `sandbox/`
+* or a clearly marked experimental folder
+
+They should not sit beside canonical assets indefinitely.
+
+---
+
+# 24. Archive Naming
+
+For archived historical copies, use:
+
+## 24.1 Pattern
+
+```text
+<original_name>_archived_<YYYY-MM-DD>.<ext>
+```
+
+Example:
+
+* `source_register_archived_2026-03-08.csv`
+
+## 24.2 Rule
+
+Archived files should never replace active canonical names.
+
+---
+
+# 25. Stem Construction Rules
+
+When building filename stems from titles:
+
+## 25.1 Normalize by:
+
+* lowercase
+* remove punctuation
+* replace spaces with underscores
+* collapse repeated underscores
+* trim very long titles
+
+## 25.2 Keep stems concise
+
+Target:
+
+* 2 to 6 words where possible
+
+## 25.3 Preserve semantic identity
+
+Prefer meaningful stems over brute truncation.
+
+Example:
+Full title:
+“Investigation of Pigment-Medium Interaction Processes in Oil Paint Containing Degraded Smalt”
+
+Preferred stem:
+
+* `smalt_degradation`
+
+Not:
+
+* `investigation_of_pigment_medium_interaction_processes_in_oil_paint_containing_degraded_smalt`
+
+---
+
+# 26. Non-Negotiable Rules
+
+## 26.1 No spaces in filenames
+
+Use underscores.
+
+## 26.2 No unstable ad hoc suffixes
+
+Avoid filenames like:
+
+* `final_final`
+* `new`
+* `fixed2`
+* `use_this_one`
+
+## 26.3 No silent overwrite of versioned artifacts
+
+If a file is materially different and version/history matters, create a new dated or versioned file.
+
+## 26.4 No identity loss
+
+Every source-derived file must preserve the `SOURCE_ID` or `CHUNK_ID`.
+
+## 26.5 No folder-only meaning
+
+A filename should still be understandable even outside its folder.
+
+## 26.6 No mixing canonical and experimental files invisibly
+
+Experimental assets must be clearly marked.
+
+---
+
+# 27. Minimum QA Questions
+
+Before approving a filename pattern, the reviewer should be able to answer:
+
+1. Can I tell what this file is from its name alone?
+2. Can I tell what source or chunk it belongs to?
+3. Can a script parse this safely?
+4. If there are multiple versions, is that visible?
+5. Could this filename be confused with another artifact class?
+6. Will this still make sense six months from now?
+
+If not, the name should be revised.
+
+---
+
+# 28. Operational Checklist
+
+## For new file classes
+
+* [ ] Artifact type identified
+* [ ] Naming pattern defined
+* [ ] ID presence rule defined
+* [ ] Version/date rule defined
+* [ ] Example filename documented
+
+## For source-derived files
+
+* [ ] `SOURCE_ID` present
+* [ ] short stem present
+* [ ] extension correct
+* [ ] date tag used when required
+
+## For chunk-derived files
+
+* [ ] `CHUNK_ID` present
+* [ ] metadata/text distinction visible
+* [ ] table suffix used when needed
+
+---
+
+# 29. Recommended Companion Documents
+
+This policy works together with:
+
+1. `source_acquisition_policy.md`
+2. `metadata_provenance_rules.md`
+3. `review_workflow.md`
+4. `material_alias_map.json`
+5. `FOUNDATION_PACK_v1.md`
+
+---
+
+# 30. Adoption Rule
+
+This document should be treated as the canonical file naming standard for v1 of the Oil Painting Research Assistant.
+
+No pipeline, register, review process, or storage layout should be considered complete unless its filenames conform to this policy or to an explicitly documented exception.

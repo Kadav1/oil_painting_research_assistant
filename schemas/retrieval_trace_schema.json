@@ -1,0 +1,190 @@
+{
+  "_meta": {
+    "schema_id": "retrieval_trace_schema",
+    "version": "v1.0",
+    "description": "Schema for a retrieval trace record in the Oil Painting Research Assistant. A retrieval trace captures the full pipeline execution for a single query: query classification, filter construction, lexical and vector candidates, merge, reranking, diversity selection, and final context. Used for debugging, evaluation, and pipeline auditing.",
+    "storage_note": "Traces are written to the metadata store on demand. Not stored in ChromaDB."
+  },
+
+  "fields": {
+
+    "trace_id": {
+      "type": "string",
+      "required": true,
+      "format": "TRC-{timestamp}-{hash}",
+      "description": "Unique trace ID. Generated at trace creation time."
+    },
+
+    "query": {
+      "type": "string",
+      "required": true,
+      "description": "The original user query."
+    },
+
+    "query_classification": {
+      "type": "object",
+      "required": true,
+      "fields": {
+        "inferred_modes": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.answer_mode",
+          "description": "Answer modes inferred from the query."
+        },
+        "inferred_domains": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.domain"
+        },
+        "inferred_question_types": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.question_type"
+        },
+        "classification_method": {
+          "type": "string",
+          "description": "How classification was performed: e.g. 'keyword_rules', 'llm_classification', 'hybrid'."
+        }
+      }
+    },
+
+    "filters_applied": {
+      "type": "object",
+      "required": true,
+      "description": "The final ChromaDB where-clause filter used for retrieval. Recorded verbatim."
+    },
+
+    "lexical_candidates": {
+      "type": "array",
+      "required": true,
+      "description": "Candidate chunks returned by BM25/lexical search before merging.",
+      "items": {
+        "chunk_id": "string",
+        "bm25_score": "number",
+        "rank": "integer"
+      }
+    },
+
+    "vector_candidates": {
+      "type": "array",
+      "required": true,
+      "description": "Candidate chunks returned by ChromaDB vector search before merging.",
+      "items": {
+        "chunk_id": "string",
+        "cosine_distance": "number",
+        "rank": "integer"
+      }
+    },
+
+    "merged_candidate_pool": {
+      "type": "array",
+      "required": true,
+      "description": "Combined candidate pool after merging lexical and vector results. Before reranking.",
+      "items": {
+        "chunk_id": "string",
+        "merge_score": "number",
+        "sources": {
+          "type": "array",
+          "items": "string",
+          "description": "Which search legs contributed this chunk: 'vector', 'lexical', or both."
+        }
+      }
+    },
+
+    "reranked_results": {
+      "type": "array",
+      "required": true,
+      "description": "Candidate pool after reranking. Ordered by final rerank score.",
+      "items": {
+        "chunk_id": "string",
+        "rerank_score": "number",
+        "trust_tier": "integer",
+        "domain": "string",
+        "case_specificity": "string",
+        "rank_after_rerank": "integer"
+      }
+    },
+
+    "selected_context_chunks": {
+      "type": "array",
+      "required": true,
+      "description": "Final chunks selected for the context window after diversity and budget checks.",
+      "items": {
+        "chunk_id": "string",
+        "selection_reason": "string",
+        "token_estimate": "integer"
+      }
+    },
+
+    "excluded_candidates": {
+      "type": "array",
+      "required": false,
+      "description": "Candidates that were excluded from the context window and the reason for exclusion.",
+      "items": {
+        "chunk_id": "string",
+        "exclusion_reason": {
+          "type": "string",
+          "enum": [
+            "approval_gate",
+            "duplicate_suppressed",
+            "token_budget_exceeded",
+            "diversity_cap",
+            "tier_superseded",
+            "manual_exclude"
+          ]
+        }
+      }
+    },
+
+    "duplicate_suppression_notes": {
+      "type": "array",
+      "required": false,
+      "description": "Notes on any chunks suppressed due to duplicate cluster membership.",
+      "items": {
+        "suppressed_chunk_id": "string",
+        "kept_chunk_id": "string",
+        "cluster_id": "string",
+        "reason": "string"
+      }
+    },
+
+    "conflict_notes": {
+      "type": "array",
+      "required": false,
+      "description": "Conflicts detected among selected chunks that must be disclosed in the answer.",
+      "items": {
+        "conflict_id": "string",
+        "topic": "string",
+        "entity_ids_in_context": "array",
+        "requires_disclosure": "boolean"
+      }
+    },
+
+    "tier_coverage": {
+      "type": "object",
+      "required": false,
+      "description": "Summary of which trust tiers are represented in the final context.",
+      "example": {"1": 2, "2": 1, "3": 0, "4": 0, "5": 1}
+    },
+
+    "trace_timestamp": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 datetime",
+      "description": "Timestamp when this trace was recorded."
+    },
+
+    "context_package_id": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "ID of the context package produced from this trace, if assembled."
+    },
+
+    "pipeline_warnings": {
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Any warnings from the retrieval pipeline: empty sub-results, filter mismatches, tier gaps, budget shortfalls."
+    }
+  }
+}

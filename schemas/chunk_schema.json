@@ -1,0 +1,295 @@
+{
+  "_meta": {
+    "schema_id": "chunk_schema",
+    "version": "v1.0",
+    "description": "Schema for a chunk-level record in the Oil Painting Research Assistant. One record per retrievable chunk. chunk_id is the ChromaDB document ID. All enum values must match controlled_vocabulary.json.",
+    "chroma_note": "The retrieval_critical_fields list below defines which fields must be present in ChromaDB metadata. Full records are stored in the metadata store. ChromaDB accepts only str, int, float, bool — list fields are pipe-encoded strings."
+  },
+
+  "retrieval_critical_fields": [
+    "chunk_id",
+    "source_id",
+    "source_family",
+    "source_type",
+    "domain",
+    "trust_tier",
+    "approval_state",
+    "case_specificity",
+    "chunk_type",
+    "citability",
+    "historical_period",
+    "materials_mentioned",
+    "pigment_codes",
+    "question_types_supported",
+    "duplicate_status",
+    "duplicate_cluster_id",
+    "citation_format",
+    "source_title"
+  ],
+
+  "fields": {
+
+    "chunk_id": {
+      "type": "string",
+      "required": true,
+      "format": "CHK-{source_id}-{NNN}",
+      "example": "CHK-SRC-MUS-001-001",
+      "description": "Unique chunk ID. Used as the ChromaDB document ID. Never regenerated after initial assignment.",
+      "stable": true,
+      "chroma_type": "str"
+    },
+
+    "source_id": {
+      "type": "string",
+      "required": true,
+      "description": "Parent source ID. Must match an existing source register record.",
+      "chroma_type": "str"
+    },
+
+    "chunk_index": {
+      "type": "integer",
+      "required": true,
+      "description": "Sequential position of this chunk within its source (0-based).",
+      "chroma_type": "int"
+    },
+
+    "chunk_title": {
+      "type": "string",
+      "required": true,
+      "description": "Short semantic label describing the content of this chunk. Not a generic heading copy.",
+      "chroma_type": "str"
+    },
+
+    "section_path": {
+      "type": "string",
+      "required": true,
+      "example": "3.2.pigment_handling",
+      "description": "Dot-separated section hierarchy path from the source document.",
+      "chroma_type": "str"
+    },
+
+    "page_range": {
+      "type": ["string", "null"],
+      "required": false,
+      "example": "12-13",
+      "description": "Page range if applicable. Null if not a paginated source.",
+      "chroma_type": "str"
+    },
+
+    "text": {
+      "type": "string",
+      "required": true,
+      "description": "Full text content of this chunk as indexed."
+    },
+
+    "token_estimate": {
+      "type": "integer",
+      "required": true,
+      "description": "Approximate token count. Used for size validation and retrieval context budgeting.",
+      "chroma_type": "int"
+    },
+
+    "chunk_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.chunk_type",
+      "description": "Structural type of this chunk.",
+      "chroma_type": "str"
+    },
+
+    "domain": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.domain",
+      "description": "Primary knowledge domain of this chunk. May differ from source domain.",
+      "chroma_type": "str"
+    },
+
+    "subdomain": {
+      "type": ["string", "null"],
+      "required": true,
+      "description": "Specific area within the domain. May differ from source subdomain.",
+      "chroma_type": "str"
+    },
+
+    "materials_mentioned": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Canonical material names in this chunk. Use material_alias_map.json canonical_name values.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "pigment_codes": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Pigment codes in this chunk (e.g. PW1, PB29). Empty list if none.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "binder_types": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.binder_vocabulary",
+      "description": "Canonical binder/medium terms in this chunk.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "historical_period": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.historical_period",
+      "description": "Historical period scope of this chunk's content.",
+      "chroma_type": "str"
+    },
+
+    "artist_or_school": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.artist_or_school",
+      "description": "Artists or schools referenced in this chunk. Empty list if not applicable.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "question_types_supported": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.question_type",
+      "description": "Question classes this chunk helps answer.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "claim_types_present": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.claim_type",
+      "description": "Evidence types present in this chunk.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "case_specificity": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.case_specificity",
+      "description": "Whether this chunk is case-specific, broadly applicable, mixed, or unknown.",
+      "chroma_type": "str"
+    },
+
+    "citability": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.citability",
+      "description": "How this chunk may be cited in an answer.",
+      "chroma_type": "str"
+    },
+
+    "approval_state": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.approval_state",
+      "description": "Operational retrieval gate. Determines which contexts this chunk may be served in.",
+      "chroma_type": "str"
+    },
+
+    "retrieval_weight_hint": {
+      "type": ["integer", "null"],
+      "required": false,
+      "range": [0, 5],
+      "description": "Optional manual boost value to adjust retrieval prominence. Null if not set.",
+      "chroma_type": "int"
+    },
+
+    "quality_flags": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.quality_flag",
+      "description": "Quality issues identified during chunking or review. Empty list if clean.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "restriction_flags": {
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "enum_ref": "controlled_vocabulary.restriction_flag",
+      "description": "Operational restriction flags. Empty list if none.",
+      "chroma_type": "str",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "review_status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.review_status",
+      "description": "Current metadata review state of this chunk.",
+      "chroma_type": "str"
+    },
+
+    "duplicate_status": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.duplicate_status",
+      "default": "unique",
+      "description": "Deduplication state of this chunk.",
+      "chroma_type": "str"
+    },
+
+    "duplicate_cluster_id": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "ID of the duplicate cluster this chunk belongs to, if any. Null if unique.",
+      "chroma_type": "str"
+    },
+
+    "source_family": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.source_family",
+      "description": "Propagated from parent source record at indexing time.",
+      "chroma_type": "str"
+    },
+
+    "source_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.source_type",
+      "description": "Propagated from parent source record at indexing time.",
+      "chroma_type": "str"
+    },
+
+    "trust_tier": {
+      "type": "integer",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.trust_tier",
+      "description": "Propagated from parent source record at indexing time. Used for tier-aware reranking without source lookup.",
+      "chroma_type": "int"
+    },
+
+    "source_title": {
+      "type": "string",
+      "required": true,
+      "description": "Propagated from parent source record short_title at indexing time.",
+      "chroma_type": "str"
+    },
+
+    "citation_format": {
+      "type": "string",
+      "required": true,
+      "description": "Propagated from parent source record at indexing time. Used in citation assembly.",
+      "chroma_type": "str"
+    }
+  }
+}

@@ -1,0 +1,484 @@
+{
+  "_meta": {
+    "project": "Oil Painting Research Assistant",
+    "version": "v1.0",
+    "document_id": "OPRA-VOCAB-001",
+    "description": "Canonical machine-readable controlled vocabulary. All enum values used across schemas, ingestion, chunking, retrieval, review, and benchmarking must draw from this file. Do not add values to schemas that are not defined here."
+  },
+
+  "source_family": {
+    "_description": "Broad source class. Each family maps to a trust tier range.",
+    "values": [
+      "museum_conservation",
+      "pigment_reference",
+      "manufacturer",
+      "color_theory",
+      "historical_practice",
+      "scientific_paper"
+    ],
+    "family_codes": {
+      "museum_conservation": "MUS",
+      "pigment_reference": "PIG",
+      "manufacturer": "MFR",
+      "color_theory": "COL",
+      "historical_practice": "HIS",
+      "scientific_paper": "SCI"
+    }
+  },
+
+  "source_type": {
+    "_description": "More specific type within the source family.",
+    "values": [
+      "technical_bulletin",
+      "conservation_report",
+      "examination_report",
+      "treatment_record",
+      "pigment_handbook",
+      "pigment_database",
+      "material_reference",
+      "tds",
+      "product_catalog",
+      "sds",
+      "color_theory_text",
+      "color_reference",
+      "historical_treatise",
+      "atelier_manual",
+      "period_recipe",
+      "peer_reviewed_paper",
+      "conference_paper",
+      "technical_monograph",
+      "anthology_chapter",
+      "exhibition_catalog",
+      "web_article",
+      "blog_post",
+      "forum_thread"
+    ]
+  },
+
+  "domain": {
+    "_description": "Primary knowledge domain of a source or chunk.",
+    "values": [
+      "pigment",
+      "binder",
+      "conservation",
+      "historical_practice",
+      "color_theory",
+      "product",
+      "technique",
+      "mixed"
+    ]
+  },
+
+  "question_type": {
+    "_description": "The question class a source or chunk is best suited to answer.",
+    "values": [
+      "pigment_chemistry",
+      "pigment_handling",
+      "pigment_history",
+      "binder_chemistry",
+      "binder_handling",
+      "medium_formulation",
+      "conservation_risk",
+      "conservation_failure",
+      "degradation_mechanism",
+      "historical_plausibility",
+      "period_practice",
+      "attribution_support",
+      "color_mixing",
+      "color_analysis",
+      "optical_behavior",
+      "product_comparison",
+      "product_specification",
+      "terminology_definition",
+      "technique_advice"
+    ]
+  },
+
+  "claim_type": {
+    "_description": "The epistemic type of claims present in a source or chunk.",
+    "values": [
+      "well_established",
+      "historically_documented",
+      "empirical_observation",
+      "case_specific",
+      "product_specific",
+      "interpretive",
+      "mixed_evidence",
+      "uncertain",
+      "contested"
+    ]
+  },
+
+  "case_specificity": {
+    "_description": "Whether chunk content is case-specific, broadly applicable, or mixed.",
+    "values": [
+      "case_specific",
+      "broadly_applicable",
+      "mixed",
+      "unknown"
+    ]
+  },
+
+  "confidence_level": {
+    "_description": "Reviewer confidence in the accuracy and completeness of a metadata record.",
+    "values": [
+      "high",
+      "medium",
+      "low",
+      "unverified"
+    ]
+  },
+
+  "access_type": {
+    "_description": "How the source was accessed.",
+    "values": [
+      "open_access",
+      "institutional_library",
+      "purchased",
+      "institutional_subscription",
+      "personal_copy",
+      "archive",
+      "direct_from_publisher",
+      "scraped_with_permission",
+      "donated"
+    ]
+  },
+
+  "capture_method": {
+    "_description": "How the raw file was captured.",
+    "values": [
+      "pdf_download",
+      "html_scrape",
+      "manual_transcription",
+      "ocr_scan",
+      "api_export",
+      "manual_entry",
+      "copy_paste"
+    ]
+  },
+
+  "tables_extracted": {
+    "_description": "Status of table extraction from a source.",
+    "values": [
+      "not_applicable",
+      "not_attempted",
+      "attempted_clean",
+      "attempted_messy",
+      "manual_required"
+    ]
+  },
+
+  "chunk_type": {
+    "_description": "Structural type of a chunk.",
+    "values": [
+      "prose",
+      "table",
+      "glossary",
+      "figure_note",
+      "product_entry",
+      "mixed"
+    ]
+  },
+
+  "citability": {
+    "_description": "How a chunk may be cited in an answer.",
+    "values": [
+      "directly_citable",
+      "paraphrase_only",
+      "internal_use_only",
+      "not_citable"
+    ]
+  },
+
+  "approval_state": {
+    "_description": "Operational retrieval gate. Controls which contexts a chunk or source may be served in.",
+    "values": [
+      "not_approved",
+      "internal_draft_only",
+      "testing_only",
+      "retrieval_allowed",
+      "live_allowed"
+    ],
+    "ordered": true,
+    "_note": "not_approved is the lowest state. live_allowed is the highest. A record may not skip levels without explicit reviewer action."
+  },
+
+  "review_status": {
+    "_description": "Current metadata review state of a chunk or source record.",
+    "values": [
+      "draft",
+      "pending_review",
+      "under_review",
+      "reviewed",
+      "approved",
+      "rejected",
+      "needs_revision"
+    ]
+  },
+
+  "conflict_type": {
+    "_description": "Types of conflict that can exist between sources or claims.",
+    "values": [
+      "factual_conflict",
+      "scope_conflict",
+      "historical_conflict",
+      "product_claim_conflict",
+      "uncertainty_level_conflict",
+      "dating_conflict",
+      "attribution_conflict"
+    ]
+  },
+
+  "resolution_status": {
+    "_description": "The resolution state of a conflict record.",
+    "values": [
+      "unresolved",
+      "resolved_with_preferred",
+      "resolved_with_context",
+      "resolved_disclosed_in_answer",
+      "deferred",
+      "escalated"
+    ]
+  },
+
+  "duplicate_type": {
+    "_description": "The type of duplication relationship in a duplicate cluster.",
+    "values": [
+      "exact_duplicate",
+      "near_duplicate",
+      "format_variant",
+      "version_supersession",
+      "scope_overlap"
+    ]
+  },
+
+  "duplicate_status": {
+    "_description": "The deduplication review state of a chunk or source.",
+    "values": [
+      "unique",
+      "duplicate_suspect",
+      "confirmed_duplicate",
+      "canonical",
+      "superseded",
+      "format_variant_retained"
+    ]
+  },
+
+  "provenance_type": {
+    "_description": "How a metadata field value was determined.",
+    "values": [
+      "extracted",
+      "rule_inferred",
+      "model_suggested",
+      "manual_entered",
+      "manual_reviewed",
+      "manual_overridden",
+      "imported",
+      "derived"
+    ]
+  },
+
+  "provenance_method": {
+    "_description": "The specific method or tool used to determine a metadata field value.",
+    "values": [
+      "regex_extraction",
+      "nlp_classification",
+      "llm_suggestion",
+      "header_parse",
+      "schema_default",
+      "reviewer_judgment",
+      "cross_reference_lookup",
+      "import_from_source_register",
+      "rule_application",
+      "manual_entry"
+    ]
+  },
+
+  "override_status": {
+    "_description": "Whether a field value has been manually overridden from its original value.",
+    "values": [
+      "original",
+      "overridden",
+      "confirmed_as_is"
+    ]
+  },
+
+  "answer_label": {
+    "_description": "Controlled labels applied to claims in answers to indicate evidence type and certainty level.",
+    "values": [
+      "well_established",
+      "historically_documented",
+      "product_specific",
+      "case_specific",
+      "likely_but_context_dependent",
+      "mixed_evidence",
+      "uncertain",
+      "interpretive"
+    ]
+  },
+
+  "answer_mode": {
+    "_description": "Implicit behavioral orientation the assistant adopts based on question type.",
+    "values": [
+      "Studio",
+      "Conservation",
+      "Art History",
+      "Color Analysis",
+      "Product Comparison"
+    ]
+  },
+
+  "benchmark_category": {
+    "_description": "Benchmark question category codes.",
+    "values": [
+      "PIG",
+      "BND",
+      "CON",
+      "HIS",
+      "COL",
+      "PRD",
+      "TRM"
+    ],
+    "category_names": {
+      "PIG": "Pigments",
+      "BND": "Binders and Media",
+      "CON": "Conservation",
+      "HIS": "Historical Practice",
+      "COL": "Color Theory",
+      "PRD": "Product Comparison",
+      "TRM": "Terminology"
+    }
+  },
+
+  "benchmark_difficulty": {
+    "_description": "Difficulty level of a benchmark question.",
+    "values": [
+      "easy",
+      "medium",
+      "hard"
+    ]
+  },
+
+  "benchmark_status": {
+    "_description": "Review state of a benchmark record.",
+    "values": [
+      "draft",
+      "approved",
+      "revised",
+      "retired"
+    ]
+  },
+
+  "historical_period": {
+    "_description": "Historical period scope values. Use the most specific applicable value.",
+    "values": [
+      "pre_1400",
+      "15th_century",
+      "16th_century",
+      "17th_century",
+      "18th_century",
+      "19th_century",
+      "early_20th_century",
+      "mid_20th_century",
+      "late_20th_century",
+      "contemporary",
+      "not_applicable",
+      "multiple_periods",
+      "unknown"
+    ]
+  },
+
+  "artist_or_school": {
+    "_description": "Canonical artist names and painting schools referenced in the project. Extensible.",
+    "values": [
+      "Jan van Eyck",
+      "Rogier van der Weyden",
+      "Hans Memling",
+      "Leonardo da Vinci",
+      "Raphael",
+      "Titian",
+      "Rembrandt van Rijn",
+      "Johannes Vermeer",
+      "Peter Paul Rubens",
+      "Anthony van Dyck",
+      "Diego Velazquez",
+      "Francisco Goya",
+      "Eugene Delacroix",
+      "J.M.W. Turner",
+      "John Singer Sargent",
+      "Flemish School",
+      "Venetian School",
+      "Dutch Golden Age",
+      "Spanish Baroque",
+      "French Academic",
+      "Impressionist",
+      "not_applicable"
+    ]
+  },
+
+  "binder_vocabulary": {
+    "_description": "Canonical binder and medium terms used in the project.",
+    "values": [
+      "linseed_oil",
+      "walnut_oil",
+      "poppy_oil",
+      "safflower_oil",
+      "stand_oil",
+      "sun_thickened_oil",
+      "alkyd_medium",
+      "damar_resin",
+      "mastic_resin",
+      "venice_turpentine",
+      "beeswax",
+      "carnauba_wax",
+      "canada_balsam",
+      "turpentine",
+      "mineral_spirits",
+      "odorless_mineral_spirits",
+      "oil_of_spike",
+      "copal",
+      "amber",
+      "not_applicable"
+    ]
+  },
+
+  "trust_tier": {
+    "_description": "Source trust tier. 1 is highest trust, 5 is lowest. Null until assigned by reviewer.",
+    "values": [1, 2, 3, 4, 5],
+    "tier_families": {
+      "1": "museum_conservation",
+      "2": "pigment_reference",
+      "3": "manufacturer",
+      "4": "historical_practice",
+      "5": "color_theory_and_teaching"
+    }
+  },
+
+  "quality_flag": {
+    "_description": "Quality issues that can be applied to a chunk.",
+    "values": [
+      "ocr_suspect",
+      "table_messy",
+      "citation_unclear",
+      "product_specific",
+      "case_specific",
+      "historical_scope_unclear",
+      "needs_manual_review",
+      "low_density",
+      "duplicate_suspect"
+    ]
+  },
+
+  "restriction_flag": {
+    "_description": "Operational restriction flags that limit how a chunk or source may be used.",
+    "values": [
+      "product_only",
+      "not_for_historical_use",
+      "retrieval_only",
+      "citation_caution",
+      "case_specific_only",
+      "needs_manual_review",
+      "not_live_allowed"
+    ]
+  }
+}

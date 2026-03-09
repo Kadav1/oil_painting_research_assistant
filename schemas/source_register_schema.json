@@ -1,0 +1,344 @@
+{
+  "_meta": {
+    "schema_id": "source_register_schema",
+    "version": "v1.0",
+    "description": "Schema for a source-level record in the Oil Painting Research Assistant. One record per ingested source document. All enum values must match controlled_vocabulary.json.",
+    "chroma_note": "Source records are not directly indexed in ChromaDB. The trust_tier, source_family, source_type, and citation_format fields are propagated to chunk-level ChromaDB metadata at indexing time."
+  },
+
+  "fields": {
+
+    "source_id": {
+      "type": "string",
+      "required": true,
+      "format": "SRC-{FAMILY_CODE}-{NNN}",
+      "example": "SRC-MUS-001",
+      "description": "Unique internal source ID. Assigned at intake. Never changed after assignment.",
+      "stable": true
+    },
+
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Full title of the source document."
+    },
+
+    "short_title": {
+      "type": "string",
+      "required": true,
+      "description": "Short, scan-friendly reference label used in citations and log entries."
+    },
+
+    "source_family": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.source_family",
+      "description": "Broad source class. Determines trust tier range."
+    },
+
+    "source_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.source_type",
+      "description": "More specific source type within the family."
+    },
+
+    "institution_or_publisher": {
+      "type": "string",
+      "required": true,
+      "description": "Organization or publisher responsible for the source."
+    },
+
+    "author": {
+      "type": ["string", "null"],
+      "required": true,
+      "description": "Author name(s) if known. Use null if not identifiable; use institution name if corporate authorship."
+    },
+
+    "publication_year": {
+      "type": ["string", "integer", "null"],
+      "required": true,
+      "description": "Year of publication as integer, or 'unknown' as string, or null if not determinable."
+    },
+
+    "edition_or_version": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Edition, version number, or snapshot label if applicable."
+    },
+
+    "source_url": {
+      "type": ["string", "null"],
+      "required": true,
+      "description": "Original URL if applicable. Null if not a web source."
+    },
+
+    "access_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.access_type",
+      "description": "How the source was accessed."
+    },
+
+    "raw_file_name": {
+      "type": "string",
+      "required": true,
+      "format": "{source_id}_{descriptive_slug}.{ext}",
+      "example": "SRC-MUS-001_ngs-zinc-white-bulletin.pdf",
+      "description": "Filename of the saved raw file in data/raw/."
+    },
+
+    "raw_file_path": {
+      "type": "string",
+      "required": true,
+      "description": "Full relative path to the raw file within data/raw/."
+    },
+
+    "capture_date": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601",
+      "example": "2025-03-09",
+      "description": "Date the source was captured."
+    },
+
+    "capture_method": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.capture_method",
+      "description": "Method used to capture the source."
+    },
+
+    "trust_tier": {
+      "type": ["integer", "null"],
+      "required": true,
+      "enum_ref": "controlled_vocabulary.trust_tier",
+      "description": "Trust tier 1–5. Null until assigned by reviewer. Propagated to chunk-level ChromaDB metadata at indexing."
+    },
+
+    "authority_score": {
+      "type": ["integer", "null"],
+      "required": true,
+      "range": [0, 5],
+      "description": "0–5 score for source authority and rigor. Null until assigned."
+    },
+
+    "extractability_score": {
+      "type": ["integer", "null"],
+      "required": true,
+      "range": [0, 5],
+      "description": "0–5 score for how well content can be extracted and chunked. Null until assigned."
+    },
+
+    "coverage_value_score": {
+      "type": ["integer", "null"],
+      "required": true,
+      "range": [0, 5],
+      "description": "0–5 score for breadth and depth of domain coverage. Null until assigned."
+    },
+
+    "density_score": {
+      "type": ["integer", "null"],
+      "required": true,
+      "range": [0, 5],
+      "description": "0–5 score for information density. Null until assigned."
+    },
+
+    "priority_score": {
+      "type": ["integer", "null"],
+      "required": true,
+      "description": "Derived composite priority score used for ingestion prioritization. Null until all component scores are assigned."
+    },
+
+    "domain": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.domain",
+      "description": "Primary knowledge domain of the source."
+    },
+
+    "subdomain": {
+      "type": ["string", "null"],
+      "required": true,
+      "description": "More specific area within the domain. Free text."
+    },
+
+    "materials_mentioned": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Canonical material names mentioned in the source. Use material_alias_map.json canonical_name values.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "pigment_codes": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "description": "Pigment codes present in the source (e.g. PW1, PB29). Empty list if none.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "binder_types": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.binder_vocabulary",
+      "description": "Canonical binder/medium terms present.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "historical_period": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.historical_period",
+      "description": "Historical period scope of the source."
+    },
+
+    "artist_or_school": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.artist_or_school",
+      "description": "Artists or schools referenced. Empty list if not applicable.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "question_types_supported": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.question_type",
+      "description": "Question classes this source helps answer.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "raw_captured": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether the raw file has been saved to data/raw/."
+    },
+
+    "normalized_text_created": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether a clean normalized text version exists in data/clean/."
+    },
+
+    "tables_extracted": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.tables_extracted",
+      "description": "Table extraction status."
+    },
+
+    "metadata_attached": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether the source metadata record file exists."
+    },
+
+    "qa_reviewed": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether a human QA review has been performed."
+    },
+
+    "chunked": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether the source has been chunked."
+    },
+
+    "indexed": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether the source chunks have been indexed into retrieval stores."
+    },
+
+    "ready_for_use": {
+      "type": "boolean",
+      "required": true,
+      "description": "Whether the source is approved for live retrieval."
+    },
+
+    "case_study_vs_general": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.case_specificity",
+      "description": "Whether the source is primarily a case study or general reference."
+    },
+
+    "claim_types_present": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.claim_type",
+      "description": "Types of claims present in the source.",
+      "chroma_encoding": "pipe-delimited string"
+    },
+
+    "confidence_level": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.confidence_level",
+      "description": "Reviewer confidence in metadata completeness and accuracy."
+    },
+
+    "duplicate_status": {
+      "type": "string",
+      "required": false,
+      "enum_ref": "controlled_vocabulary.duplicate_status",
+      "default": "unique",
+      "description": "Deduplication state of this source."
+    },
+
+    "duplicate_cluster_id": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "ID of the duplicate cluster this source belongs to, if any."
+    },
+
+    "superseded_by": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Source ID of the record that supersedes this one, if applicable."
+    },
+
+    "limitations_notes": {
+      "type": "string",
+      "required": true,
+      "description": "Known limitations, scope boundaries, or weaknesses of this source."
+    },
+
+    "license_or_usage_notes": {
+      "type": "string",
+      "required": true,
+      "description": "Usage constraints: internal summary only, full quotation permitted, etc."
+    },
+
+    "citation_format": {
+      "type": "string",
+      "required": true,
+      "description": "Preferred short citation text for use in answers. Propagated to chunk-level ChromaDB metadata at indexing."
+    },
+
+    "summary": {
+      "type": "string",
+      "required": true,
+      "description": "2–4 sentence functional summary: what the source covers and when to use it."
+    },
+
+    "retrieval_notes": {
+      "type": "string",
+      "required": true,
+      "description": "Guidance for when and how to use this source in retrieval."
+    },
+
+    "internal_notes": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Project-specific operational notes not intended for citation."
+    }
+  }
+}

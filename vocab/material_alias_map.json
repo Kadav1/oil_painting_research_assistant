@@ -1,0 +1,353 @@
+{
+  "_meta": {
+    "schema_id": "material_alias_map",
+    "version": "v1.0",
+    "description": "Canonical material alias map for the Oil Painting Research Assistant. Maps alias terms to canonical names for materials mentioned in sources and chunks. Used during ingestion, metadata extraction, and query normalization. The canonical_name field is the value stored in materials_mentioned fields."
+  },
+
+  "materials": [
+    {
+      "canonical_name": "lead_white",
+      "display_name": "Lead White",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PW1", "PW2"],
+      "aliases_strict": ["white lead", "flake white", "cremnitz white", "ceruse"],
+      "aliases_soft": ["silver white", "stack white"],
+      "ambiguity_warnings": [
+        "Flake white sometimes refers to a specific product formulation, not pure PW1",
+        "Cremnitz white is a distinct formulation of lead white with different particle morphology"
+      ],
+      "notes": "Historical pigment. High density. Historically dominant white in oil painting. Associated with conservation concerns in modern use."
+    },
+    {
+      "canonical_name": "zinc_white",
+      "display_name": "Zinc White",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PW4"],
+      "aliases_strict": ["zinc oxide", "chinese white"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Chinese white typically refers to the watercolor formulation, not oil",
+        "Do not conflate zinc_white with titanium_white — different chemistry and handling"
+      ],
+      "notes": "Associated with brittleness concerns in oil paint films. Risk varies by formulation, proportion, and application context."
+    },
+    {
+      "canonical_name": "titanium_white",
+      "display_name": "Titanium White",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PW6"],
+      "aliases_strict": ["titanium dioxide", "TiO2"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Do not conflate titanium_white with zinc_white or lead_white — distinct material properties"
+      ],
+      "notes": "Modern dominant white. High opacity, high tinting strength. First commercially available early 20th century — anachronistic in pre-20th century historical context."
+    },
+    {
+      "canonical_name": "ultramarine",
+      "display_name": "Ultramarine Blue (Synthetic)",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PB29"],
+      "aliases_strict": ["French ultramarine", "synthetic ultramarine"],
+      "aliases_soft": ["ultramarine blue"],
+      "ambiguity_warnings": [
+        "Distinguish from natural_ultramarine (lapis lazuli, PB29 natural) — different cost, availability, and historical use",
+        "Queries about 'ultramarine' in historical context may refer to natural_ultramarine"
+      ],
+      "notes": "Synthetic version developed 1828. Broadly lightfast. Modern standard blue."
+    },
+    {
+      "canonical_name": "natural_ultramarine",
+      "display_name": "Natural Ultramarine (Lapis Lazuli)",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PB29"],
+      "aliases_strict": ["lapis lazuli", "ultramarinum verum", "genuine ultramarine"],
+      "aliases_soft": ["ultramarine"],
+      "ambiguity_warnings": [
+        "PB29 is used for both natural and synthetic ultramarine — distinguish in historical context",
+        "Queries about ultramarine before 1828 refer to this material"
+      ],
+      "notes": "Historically the most expensive pigment. Derived from lapis lazuli. Widely used in medieval and Renaissance painting."
+    },
+    {
+      "canonical_name": "yellow_ochre",
+      "display_name": "Yellow Ochre",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PY43"],
+      "aliases_strict": ["ochre", "raw ochre", "earth yellow"],
+      "aliases_soft": ["gold ochre"],
+      "ambiguity_warnings": [
+        "Distinct from mars_yellow (synthetic iron oxide) even when both appear as yellow earth tones"
+      ],
+      "notes": "Natural earth pigment. Historically universal. Lightfast and stable."
+    },
+    {
+      "canonical_name": "raw_umber",
+      "display_name": "Raw Umber",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBr7"],
+      "aliases_strict": ["umber", "terra ombra"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinguish from burnt_umber — different color and handling properties"
+      ],
+      "notes": "Fast dryer due to manganese content. Natural earth pigment."
+    },
+    {
+      "canonical_name": "burnt_umber",
+      "display_name": "Burnt Umber",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBr7"],
+      "aliases_strict": ["calcined umber"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinguish from raw_umber — darker, warmer, still a fast dryer but different color"
+      ],
+      "notes": "Produced by calcining raw umber. Fast dryer. Widely used for underpainting and glazing."
+    },
+    {
+      "canonical_name": "raw_sienna",
+      "display_name": "Raw Sienna",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBr7"],
+      "aliases_strict": ["terra di siena"],
+      "aliases_soft": ["sienna"],
+      "ambiguity_warnings": [
+        "Distinguish from burnt_sienna — different color and transparency"
+      ],
+      "notes": "Transparent yellow-brown earth. Historical pigment."
+    },
+    {
+      "canonical_name": "burnt_sienna",
+      "display_name": "Burnt Sienna",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBr7"],
+      "aliases_strict": ["calcined sienna"],
+      "aliases_soft": ["sienna"],
+      "ambiguity_warnings": [
+        "Distinguish from raw_sienna — warmer, more transparent red-brown"
+      ],
+      "notes": "Produced by calcining raw sienna. Warm transparent red-brown."
+    },
+    {
+      "canonical_name": "terre_verte",
+      "display_name": "Terre Verte",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PG23"],
+      "aliases_strict": ["green earth", "terra verde", "verona green"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Modern paints labelled terre verte may contain PG7 or PG36 rather than PG23 — check TDS"
+      ],
+      "notes": "Historically used in flesh shadow underpaintings, particularly in Italian and Flemish practice. Weak tinting strength."
+    },
+    {
+      "canonical_name": "viridian",
+      "display_name": "Viridian",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PG18"],
+      "aliases_strict": ["chrome oxide hydrate", "viridian green", "guignet's green"],
+      "aliases_soft": ["transparent oxide of chromium"],
+      "ambiguity_warnings": [
+        "Distinct from chrome_oxide_green (PG17) — viridian is transparent, chrome oxide is opaque"
+      ],
+      "notes": "Transparent, cool, lightfast green. Introduced mid-19th century."
+    },
+    {
+      "canonical_name": "verdigris",
+      "display_name": "Verdigris",
+      "category": "pigment",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["copper acetate green", "vert-de-gris"],
+      "aliases_soft": ["copper green"],
+      "ambiguity_warnings": [
+        "Historical pigment — not equivalent to any modern synthetic pigment",
+        "Prone to discoloration in oil — document source when citing claims about stability"
+      ],
+      "notes": "Historical copper acetate pigment. Used in medieval and Renaissance painting. Known to discolor and degrade in oil media."
+    },
+    {
+      "canonical_name": "smalt",
+      "display_name": "Smalt",
+      "category": "pigment",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["glass blue", "cobalt blue glass", "enamel blue"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Not the same as cobalt_blue (PB28) — completely different material",
+        "Smalt discoloration is a well-documented conservation issue"
+      ],
+      "notes": "Historical blue glass pigment. Cobalt-containing. Known to discolor (decolorize) over time. Common in 15th–18th century European painting."
+    },
+    {
+      "canonical_name": "ivory_black",
+      "display_name": "Ivory Black",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBk9"],
+      "aliases_strict": ["bone black", "spodium"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Modern ivory_black is typically bone black (calcined bone), not true ivory — manufacturers vary"
+      ],
+      "notes": "Slow dryer. Warm black with brownish undertone. Historical and modern use."
+    },
+    {
+      "canonical_name": "mars_black",
+      "display_name": "Mars Black",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PBk11"],
+      "aliases_strict": ["iron oxide black", "synthetic iron black"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinct from ivory_black and vine_black in drying and tinting behavior"
+      ],
+      "notes": "Synthetic iron oxide. Fast dryer. High tinting strength. Dense, neutral black."
+    },
+    {
+      "canonical_name": "cadmium_red",
+      "display_name": "Cadmium Red",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PR108"],
+      "aliases_strict": ["cadmium red light", "cadmium red deep", "cadmium red medium"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Product labels distinguish light/medium/deep — these are different hue positions, not different pigments",
+        "Some products labelled 'cadmium red' use cadmium-free alternatives — check TDS for PR108 vs. other codes"
+      ],
+      "notes": "Opaque, lightfast red. Not available historically before mid-19th century."
+    },
+    {
+      "canonical_name": "alizarin_crimson",
+      "display_name": "Alizarin Crimson",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PR83"],
+      "aliases_strict": ["alizarin", "rose madder alizarin"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "ASTM lightfastness rating is typically poor — relevant for conservation discussion",
+        "Distinct from quinacridone_red and permanent_alizarin which are modern replacements"
+      ],
+      "notes": "Transparent, cool red. Synthetic dye-based pigment. Known lightfastness concerns."
+    },
+    {
+      "canonical_name": "cobalt_blue",
+      "display_name": "Cobalt Blue",
+      "category": "pigment",
+      "pigment_codes_explicit": ["PB28"],
+      "aliases_strict": ["cobalt aluminate blue"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinct from smalt — smalt is a glass, cobalt_blue is a calcined pigment",
+        "Introduced 1802 — anachronistic before that date"
+      ],
+      "notes": "Lightfast, somewhat transparent blue. Historical use from early 19th century."
+    },
+    {
+      "canonical_name": "linseed_oil",
+      "display_name": "Linseed Oil",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["flaxseed oil", "lin oil"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinguish from stand_oil and sun_thickened_oil — all linseed-based but different processing and handling"
+      ],
+      "notes": "Most common oil binder. Dries by oxidative polymerization. More prone to yellowing than walnut or safflower."
+    },
+    {
+      "canonical_name": "walnut_oil",
+      "display_name": "Walnut Oil",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["noce oil"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [],
+      "notes": "Less prone to yellowing than linseed. Slower drying. Historically used with blue and white pigments to reduce yellowing."
+    },
+    {
+      "canonical_name": "safflower_oil",
+      "display_name": "Safflower Oil",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": [],
+      "aliases_soft": [],
+      "ambiguity_warnings": [],
+      "notes": "Pale drying oil. Low yellowing. Slow drying. Common in modern white and light-colored paints."
+    },
+    {
+      "canonical_name": "poppy_oil",
+      "display_name": "Poppy Oil",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["poppyseed oil", "huile de pavot"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Very slow drying — increased risk of paint film failure in thick applications"
+      ],
+      "notes": "Pale drying oil. Very slow drying. Low yellowing. High risk of wrinkling and paint film instability in heavy applications."
+    },
+    {
+      "canonical_name": "stand_oil",
+      "display_name": "Stand Oil",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["polymerized linseed oil", "thickened linseed oil"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinct from raw linseed oil in viscosity, drying behavior, and yellowing tendency",
+        "Distinct from sun_thickened_oil — produced differently"
+      ],
+      "notes": "Heat-polymerized linseed oil. High viscosity. Long, ropy brushstroke. Less prone to yellowing than raw linseed. Good film strength."
+    },
+    {
+      "canonical_name": "alkyd_medium",
+      "display_name": "Alkyd Medium",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["alkyd resin medium"],
+      "aliases_soft": ["liquin", "galkyd"],
+      "ambiguity_warnings": [
+        "Liquin, Galkyd, and similar brand names are specific alkyd products — do not generalize across brands"
+      ],
+      "notes": "Synthetic resin-based drying medium. Accelerates drying. Modern material — anachronistic in historical context."
+    },
+    {
+      "canonical_name": "damar_resin",
+      "display_name": "Damar Resin",
+      "category": "binder",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["dammar resin", "damar varnish"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "As varnish vs. as painting medium — different usage contexts with different conservation implications"
+      ],
+      "notes": "Natural resin from tropical trees. Common as final varnish and as painting medium in some traditions."
+    },
+    {
+      "canonical_name": "turpentine",
+      "display_name": "Turpentine",
+      "category": "solvent",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["spirits of turpentine", "genuine turpentine", "distilled turpentine"],
+      "aliases_soft": [],
+      "ambiguity_warnings": [
+        "Distinct from mineral spirits / white spirit — different solvent chemistry",
+        "Oil of spike lavender is a different solvent with distinct properties"
+      ],
+      "notes": "Distilled from pine resin. Traditional solvent. Faster evaporating than mineral spirits."
+    },
+    {
+      "canonical_name": "mineral_spirits",
+      "display_name": "Mineral Spirits",
+      "category": "solvent",
+      "pigment_codes_explicit": [],
+      "aliases_strict": ["white spirit", "petroleum spirits", "painter's naphtha"],
+      "aliases_soft": ["odorless mineral spirits"],
+      "ambiguity_warnings": [
+        "Odorless mineral spirits is a refined variant — distinguish when handling differences are relevant"
+      ],
+      "notes": "Petroleum-derived solvent. Common modern substitute for turpentine."
+    }
+  ]
+}

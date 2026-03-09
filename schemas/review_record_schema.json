@@ -1,0 +1,123 @@
+{
+  "_meta": {
+    "schema_id": "review_record_schema",
+    "version": "v1.0",
+    "description": "Schema for a review event record in the Oil Painting Research Assistant. One record per review action taken on a source or chunk. Review records form the audit trail for metadata changes and approval state transitions.",
+    "storage_note": "Review records are stored in the metadata store. They are not stored in ChromaDB."
+  },
+
+  "fields": {
+
+    "review_id": {
+      "type": "string",
+      "required": true,
+      "format": "REV-{entity_id}-{NNN}",
+      "example": "REV-SRC-MUS-001-001",
+      "description": "Unique review record ID. Assigned sequentially per entity."
+    },
+
+    "entity_type": {
+      "type": "string",
+      "required": true,
+      "enum": ["source", "chunk"],
+      "description": "Whether this review record applies to a source or a chunk."
+    },
+
+    "entity_id": {
+      "type": "string",
+      "required": true,
+      "description": "The source_id or chunk_id of the entity being reviewed."
+    },
+
+    "review_stage": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "intake_review",
+        "metadata_review",
+        "chunk_review",
+        "approval_review",
+        "conflict_review",
+        "deduplication_review",
+        "periodic_audit"
+      ],
+      "description": "The stage of the review workflow this record documents."
+    },
+
+    "reviewer": {
+      "type": "string",
+      "required": true,
+      "description": "Username or identifier of the reviewer performing this action."
+    },
+
+    "review_date": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 datetime",
+      "description": "Timestamp when this review action was performed."
+    },
+
+    "action": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "approved",
+        "rejected",
+        "returned_for_revision",
+        "flagged",
+        "advanced",
+        "overridden",
+        "noted"
+      ],
+      "description": "The action taken during this review."
+    },
+
+    "status_before": {
+      "type": "string",
+      "required": true,
+      "description": "The review_status or approval_state of the entity before this review action."
+    },
+
+    "status_after": {
+      "type": "string",
+      "required": true,
+      "description": "The review_status or approval_state of the entity after this review action."
+    },
+
+    "summary_of_findings": {
+      "type": "string",
+      "required": true,
+      "description": "Summary of what the reviewer found: what was correct, what was changed, what concerns remain."
+    },
+
+    "field_changes": {
+      "type": "array",
+      "required": false,
+      "items": {
+        "field_name": "string",
+        "old_value": "any",
+        "new_value": "any"
+      },
+      "description": "List of field values changed during this review. Each entry records the field name, old value, and new value."
+    },
+
+    "warnings": {
+      "type": "array",
+      "items": "string",
+      "required": false,
+      "description": "Any quality flags, concerns, or issues noted during this review that do not block approval but should be tracked."
+    },
+
+    "next_action": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Recommended next action for this entity after this review. Null if no follow-up required."
+    },
+
+    "notes": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Optional additional context about this review event."
+    }
+  }
+}

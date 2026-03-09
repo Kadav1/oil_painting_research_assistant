@@ -1,0 +1,154 @@
+{
+  "_meta": {
+    "schema_id": "context_package_schema",
+    "version": "v1.0",
+    "description": "Schema for the retrieval-to-generation context package in the Oil Painting Research Assistant. A context package is assembled after retrieval and reranking and passed to the answer generation step. It contains the selected chunks, their metadata snapshots, citation data, and any conflict or retrieval notes."
+  },
+
+  "fields": {
+
+    "package_id": {
+      "type": "string",
+      "required": true,
+      "format": "PKG-{timestamp}-{hash}",
+      "description": "Unique ID for this context package. Generated at assembly time."
+    },
+
+    "query": {
+      "type": "string",
+      "required": true,
+      "description": "The original user query that triggered this retrieval."
+    },
+
+    "query_classification": {
+      "type": "object",
+      "required": true,
+      "fields": {
+        "inferred_modes": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.answer_mode",
+          "description": "Answer modes inferred from the query."
+        },
+        "inferred_domains": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.domain",
+          "description": "Domains inferred from the query."
+        },
+        "inferred_question_types": {
+          "type": "array",
+          "items": "string",
+          "enum_ref": "controlled_vocabulary.question_type",
+          "description": "Question types inferred from the query."
+        }
+      }
+    },
+
+    "filters_applied": {
+      "type": "object",
+      "required": true,
+      "description": "ChromaDB where-clause filters applied during retrieval. Recorded for traceability.",
+      "example": {"approval_state": {"$in": ["retrieval_allowed", "live_allowed"]}, "domain": "pigment"}
+    },
+
+    "selected_chunks": {
+      "type": "array",
+      "required": true,
+      "min_items": 0,
+      "description": "Ordered list of chunks selected for the context window, in presentation order.",
+      "items": {
+        "chunk_id": {
+          "type": "string",
+          "description": "Chunk ID."
+        },
+        "source_id": {
+          "type": "string",
+          "description": "Parent source ID."
+        },
+        "chunk_title": {
+          "type": "string",
+          "description": "Semantic label."
+        },
+        "text": {
+          "type": "string",
+          "description": "Full chunk text."
+        },
+        "trust_tier": {
+          "type": "integer",
+          "description": "Source trust tier."
+        },
+        "domain": {
+          "type": "string",
+          "description": "Chunk domain."
+        },
+        "case_specificity": {
+          "type": "string",
+          "description": "Case specificity of this chunk."
+        },
+        "citability": {
+          "type": "string",
+          "description": "Citability level."
+        },
+        "citation_format": {
+          "type": "string",
+          "description": "Citation string for use in the answer."
+        },
+        "rerank_score": {
+          "type": ["number", "null"],
+          "description": "Reranking score assigned during the reranking step. Null if no reranker used."
+        },
+        "selection_reason": {
+          "type": "string",
+          "description": "Why this chunk was selected: e.g. 'top_vector', 'top_bm25', 'tier_boost', 'diversity_fill'."
+        }
+      }
+    },
+
+    "token_budget_used": {
+      "type": "integer",
+      "required": true,
+      "description": "Approximate total tokens consumed by selected chunk texts."
+    },
+
+    "token_budget_limit": {
+      "type": "integer",
+      "required": true,
+      "description": "Maximum token budget available for the context window in this request."
+    },
+
+    "conflict_notes": {
+      "type": "array",
+      "required": true,
+      "min_items": 0,
+      "description": "Notes on any known conflicts between selected chunks that the answer generation step must handle.",
+      "items": {
+        "conflict_id": "string",
+        "topic": "string",
+        "entity_ids_in_context": "array",
+        "requires_disclosure": "boolean",
+        "summary": "string"
+      }
+    },
+
+    "retrieval_notes": {
+      "type": "array",
+      "required": false,
+      "description": "Operational notes from the retrieval pipeline — e.g. empty results for a subquery, tier coverage gaps, diversity decisions.",
+      "items": "string"
+    },
+
+    "assembly_timestamp": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 datetime",
+      "description": "Timestamp when this context package was assembled."
+    },
+
+    "retrieval_trace_id": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "ID of the retrieval trace record that produced this context package, if tracing is enabled."
+    }
+  }
+}

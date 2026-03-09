@@ -1,0 +1,178 @@
+{
+  "_meta": {
+    "schema_id": "material_ontology_v1",
+    "version": "v1.0",
+    "description": "Lightweight material ontology for the Oil Painting Research Assistant. Encodes relationships between materials — what they are, how they relate historically, what they are not equivalent to, and what risks or uses are associated with them. Designed for implementation-friendly use in retrieval, scope checking, and disambiguation. Not a formal OWL/RDF ontology.",
+    "relationship_types": [
+      "is_a",
+      "historical_variant_of",
+      "not_equivalent_to",
+      "often_compared_with",
+      "binder_of",
+      "associated_risk",
+      "associated_use",
+      "replaced_by",
+      "precursor_to"
+    ]
+  },
+
+  "entities": [
+    {
+      "canonical_name": "lead_white",
+      "entity_type": "pigment",
+      "parent_category": "white_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "white_pigment"},
+        {"type": "not_equivalent_to", "target": "zinc_white", "note": "Different chemistry, opacity, and drying behavior"},
+        {"type": "not_equivalent_to", "target": "titanium_white", "note": "Different chemistry, handling, and historical period"},
+        {"type": "often_compared_with", "target": "zinc_white"},
+        {"type": "often_compared_with", "target": "titanium_white"},
+        {"type": "replaced_by", "target": "titanium_white", "note": "In most modern studio use from 20th century onward"},
+        {"type": "associated_risk", "target": "lead_toxicity"},
+        {"type": "associated_use", "target": "ground_layer"},
+        {"type": "associated_use", "target": "flesh_painting"}
+      ]
+    },
+    {
+      "canonical_name": "zinc_white",
+      "entity_type": "pigment",
+      "parent_category": "white_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "white_pigment"},
+        {"type": "not_equivalent_to", "target": "lead_white"},
+        {"type": "not_equivalent_to", "target": "titanium_white"},
+        {"type": "often_compared_with", "target": "lead_white"},
+        {"type": "often_compared_with", "target": "titanium_white"},
+        {"type": "associated_risk", "target": "paint_film_brittleness", "note": "Associated with brittleness in oil films — risk level context-dependent"},
+        {"type": "associated_use", "target": "cool_light_mixing"}
+      ]
+    },
+    {
+      "canonical_name": "titanium_white",
+      "entity_type": "pigment",
+      "parent_category": "white_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "white_pigment"},
+        {"type": "not_equivalent_to", "target": "lead_white"},
+        {"type": "not_equivalent_to", "target": "zinc_white"},
+        {"type": "replaced_by", "target": null, "note": "Dominant modern white"},
+        {"type": "associated_use", "target": "high_opacity_mixing"},
+        {"type": "associated_use", "target": "ground_layer"}
+      ]
+    },
+    {
+      "canonical_name": "natural_ultramarine",
+      "entity_type": "pigment",
+      "parent_category": "blue_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "blue_pigment"},
+        {"type": "historical_variant_of", "target": "ultramarine", "note": "Natural source material; synthetic ultramarine is the modern equivalent"},
+        {"type": "not_equivalent_to", "target": "ultramarine", "note": "Different source material and cost; same color family"},
+        {"type": "often_compared_with", "target": "smalt", "note": "Both historical blues"},
+        {"type": "replaced_by", "target": "ultramarine", "note": "By synthetic ultramarine from 1828 onward"},
+        {"type": "associated_use", "target": "high_value_historical_commissions"}
+      ]
+    },
+    {
+      "canonical_name": "smalt",
+      "entity_type": "pigment",
+      "parent_category": "blue_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "blue_pigment"},
+        {"type": "not_equivalent_to", "target": "cobalt_blue", "note": "Glass material, not a calcined pigment — completely different chemistry"},
+        {"type": "not_equivalent_to", "target": "natural_ultramarine"},
+        {"type": "often_compared_with", "target": "natural_ultramarine"},
+        {"type": "associated_risk", "target": "discoloration_decolorization", "note": "Known to decolorize in oil over time — conservation concern"},
+        {"type": "associated_use", "target": "blue_drapery"},
+        {"type": "associated_use", "target": "sky_painting"}
+      ]
+    },
+    {
+      "canonical_name": "verdigris",
+      "entity_type": "pigment",
+      "parent_category": "green_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "green_pigment"},
+        {"type": "not_equivalent_to", "target": "viridian", "note": "Historical copper acetate vs. modern hydrated chrome oxide"},
+        {"type": "not_equivalent_to", "target": "terre_verte"},
+        {"type": "associated_risk", "target": "chemical_instability_in_oil", "note": "Prone to degradation and discoloration in oil media"},
+        {"type": "associated_use", "target": "green_drapery"},
+        {"type": "precursor_to", "target": null, "note": "No modern direct equivalent — discontinued in studio use"}
+      ]
+    },
+    {
+      "canonical_name": "terre_verte",
+      "entity_type": "pigment",
+      "parent_category": "green_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "green_pigment"},
+        {"type": "not_equivalent_to", "target": "viridian"},
+        {"type": "not_equivalent_to", "target": "verdigris"},
+        {"type": "often_compared_with", "target": "viridian"},
+        {"type": "associated_use", "target": "flesh_shadow_underpainting", "note": "Historically used in flesh tone underpaintings in Italian and Flemish practice"},
+        {"type": "associated_use", "target": "landscape"}
+      ]
+    },
+    {
+      "canonical_name": "raw_umber",
+      "entity_type": "pigment",
+      "parent_category": "earth_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "earth_pigment"},
+        {"type": "not_equivalent_to", "target": "burnt_umber", "note": "Different color and hue after calcination"},
+        {"type": "often_compared_with", "target": "burnt_umber"},
+        {"type": "associated_use", "target": "fast_drying_underpainting", "note": "Manganese content accelerates drying"},
+        {"type": "associated_use", "target": "toning_grounds"}
+      ]
+    },
+    {
+      "canonical_name": "alizarin_crimson",
+      "entity_type": "pigment",
+      "parent_category": "red_pigment",
+      "relationships": [
+        {"type": "is_a", "target": "red_pigment"},
+        {"type": "not_equivalent_to", "target": "cadmium_red", "note": "Transparent vs. opaque; different chemistry and lightfastness"},
+        {"type": "associated_risk", "target": "poor_lightfastness", "note": "ASTM lightfastness typically poor — conservation concern"},
+        {"type": "often_compared_with", "target": "cadmium_red"}
+      ]
+    },
+    {
+      "canonical_name": "linseed_oil",
+      "entity_type": "binder",
+      "parent_category": "drying_oil",
+      "relationships": [
+        {"type": "is_a", "target": "drying_oil"},
+        {"type": "not_equivalent_to", "target": "stand_oil", "note": "Stand oil is polymerized linseed — different viscosity and handling"},
+        {"type": "not_equivalent_to", "target": "walnut_oil", "note": "Different yellowing tendency and drying rate"},
+        {"type": "often_compared_with", "target": "walnut_oil"},
+        {"type": "often_compared_with", "target": "safflower_oil"},
+        {"type": "precursor_to", "target": "stand_oil", "note": "Stand oil is made by heat-polymerizing linseed oil"},
+        {"type": "associated_risk", "target": "yellowing", "note": "More prone to yellowing than walnut or safflower oils"},
+        {"type": "binder_of", "target": "most_oil_paints"}
+      ]
+    },
+    {
+      "canonical_name": "stand_oil",
+      "entity_type": "binder",
+      "parent_category": "processed_drying_oil",
+      "relationships": [
+        {"type": "is_a", "target": "processed_drying_oil"},
+        {"type": "historical_variant_of", "target": "linseed_oil", "note": "Produced by polymerizing linseed oil"},
+        {"type": "not_equivalent_to", "target": "linseed_oil", "note": "Very different viscosity and handling from raw linseed"},
+        {"type": "associated_use", "target": "glazing_medium"},
+        {"type": "associated_use", "target": "slow_drying_medium"}
+      ]
+    },
+    {
+      "canonical_name": "alkyd_medium",
+      "entity_type": "binder",
+      "parent_category": "synthetic_medium",
+      "relationships": [
+        {"type": "is_a", "target": "synthetic_medium"},
+        {"type": "not_equivalent_to", "target": "linseed_oil", "note": "Synthetic resin — different chemistry, not a natural oil"},
+        {"type": "associated_use", "target": "fast_drying_applications"},
+        {"type": "associated_risk", "target": "historical_anachronism", "note": "Modern material — anachronistic in any pre-20th century historical context"}
+      ]
+    }
+  ]
+}

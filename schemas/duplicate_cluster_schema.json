@@ -1,0 +1,79 @@
+{
+  "_meta": {
+    "schema_id": "duplicate_cluster_schema",
+    "version": "v1.0",
+    "description": "Schema for a duplicate cluster record in the Oil Painting Research Assistant. A cluster groups two or more sources or chunks that have been identified as duplicates or near-duplicates. One cluster per duplicate group. The canonical_id identifies the preferred record."
+  },
+
+  "fields": {
+
+    "cluster_id": {
+      "type": "string",
+      "required": true,
+      "format": "DUP-{entity_type_code}-{NNN}",
+      "example": "DUP-CHK-001",
+      "description": "Unique duplicate cluster ID. Assigned when the cluster is created."
+    },
+
+    "entity_type": {
+      "type": "string",
+      "required": true,
+      "enum": ["source", "chunk"],
+      "description": "Whether this cluster contains source records or chunk records."
+    },
+
+    "member_ids": {
+      "type": "array",
+      "items": "string",
+      "required": true,
+      "min_items": 2,
+      "description": "List of source_id or chunk_id values that are members of this cluster. Must include the canonical_id."
+    },
+
+    "canonical_id": {
+      "type": "string",
+      "required": true,
+      "description": "The source_id or chunk_id of the preferred record in the cluster. Other members are subordinate to this record."
+    },
+
+    "duplicate_type": {
+      "type": "string",
+      "required": true,
+      "enum_ref": "controlled_vocabulary.duplicate_type",
+      "description": "The type of duplication relationship."
+    },
+
+    "reason": {
+      "type": "string",
+      "required": true,
+      "description": "Explanation of why these records were grouped: what they share, how they differ, and why the canonical was chosen."
+    },
+
+    "reviewer": {
+      "type": "string",
+      "required": true,
+      "description": "Username or identifier of the reviewer who made the deduplication decision."
+    },
+
+    "decision_date": {
+      "type": "string",
+      "required": true,
+      "format": "ISO 8601 date",
+      "example": "2025-03-09",
+      "description": "Date the cluster decision was made."
+    },
+
+    "status": {
+      "type": "string",
+      "required": true,
+      "enum": ["open", "resolved", "needs_revision"],
+      "description": "Current state of the cluster decision. 'open' means pending final action. 'resolved' means the canonical has been confirmed and non-canonical members have been handled."
+    },
+
+    "notes": {
+      "type": ["string", "null"],
+      "required": false,
+      "description": "Optional additional context about the duplication or the decision."
+    }
+  }
+}

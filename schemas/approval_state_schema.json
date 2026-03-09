@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "schema_id": "approval_state_schema",
+    "version": "v1.0",
+    "description": "Machine-readable definition of approval states and their operational meanings for the Oil Painting Research Assistant. Approval state is an ordered gate controlling which contexts a chunk or source may be served in. All approval state values must match controlled_vocabulary.approval_state."
+  },
+
+  "ordered": true,
+  "ascending_privilege": true,
+  "note": "A record may not skip levels without explicit reviewer action. Transitions must be documented in a review record.",
+
+  "states": [
+    {
+      "value": "not_approved",
+      "ordinal": 0,
+      "label": "Not Approved",
+      "description": "Default state for all newly created or auto-chunked records. Record has not passed any review.",
+      "retrieval_allowed": false,
+      "testing_allowed": false,
+      "internal_allowed": false,
+      "may_be_indexed": false,
+      "transition_requires": "initial_review"
+    },
+    {
+      "value": "internal_draft_only",
+      "ordinal": 1,
+      "label": "Internal Draft Only",
+      "description": "Record has passed initial metadata review. May be used for internal development and tooling. Not visible in retrieval or test environments.",
+      "retrieval_allowed": false,
+      "testing_allowed": false,
+      "internal_allowed": true,
+      "may_be_indexed": false,
+      "transition_requires": "metadata_review_passed"
+    },
+    {
+      "value": "testing_only",
+      "ordinal": 2,
+      "label": "Testing Only",
+      "description": "Record has passed chunk and metadata review. May be used in retrieval during benchmark evaluation and system testing. Not served in live user-facing contexts.",
+      "retrieval_allowed": true,
+      "testing_allowed": true,
+      "internal_allowed": true,
+      "may_be_indexed": true,
+      "index_collections": ["chunks_draft"],
+      "transition_requires": "chunk_review_passed"
+    },
+    {
+      "value": "retrieval_allowed",
+      "ordinal": 3,
+      "label": "Retrieval Allowed",
+      "description": "Record has passed full review and may be served in retrieval queries. Not yet approved for live user-facing production responses.",
+      "retrieval_allowed": true,
+      "testing_allowed": true,
+      "internal_allowed": true,
+      "may_be_indexed": true,
+      "index_collections": ["chunks_retrieval", "chunks_draft"],
+      "transition_requires": "approval_review_passed"
+    },
+    {
+      "value": "live_allowed",
+      "ordinal": 4,
+      "label": "Live Allowed",
+      "description": "Record has passed all review stages and is approved for live user-facing production responses. Highest approval level.",
+      "retrieval_allowed": true,
+      "testing_allowed": true,
+      "internal_allowed": true,
+      "may_be_indexed": true,
+      "index_collections": ["chunks_live", "chunks_retrieval", "chunks_draft"],
+      "transition_requires": "live_approval_review_passed"
+    }
+  ],
+
+  "chromadb_collection_names": {
+    "chunks_live": "Production live collection. Contains only live_allowed chunks.",
+    "chunks_retrieval": "Retrieval-ready collection. Contains retrieval_allowed and live_allowed chunks.",
+    "chunks_draft": "Development and test collection. Contains testing_only, retrieval_allowed, and live_allowed chunks."
+  },
+
+  "retrieval_gate_filter": {
+    "description": "ChromaDB where-clause filter used to gate retrieval to approved chunks only.",
+    "live_query": {"approval_state": {"$in": ["live_allowed"]}},
+    "retrieval_query": {"approval_state": {"$in": ["retrieval_allowed", "live_allowed"]}},
+    "testing_query": {"approval_state": {"$in": ["testing_only", "retrieval_allowed", "live_allowed"]}}
+  }
+}
