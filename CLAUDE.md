@@ -17,13 +17,16 @@ pip install -e .
 cp .env.example .env  # then populate any required values
 
 # Run CLI
-python -m oil_painting_rag.cli  # stub — no-op until cli.py is implemented
+python -m oil_painting_rag.cli
 
-# Run API server
-python -m oil_painting_rag.api  # stub — no-op until api.py is implemented
+# Run API server (FastAPI + uvicorn)
+python -m oil_painting_rag.api
 
-# Run tests (no tests exist yet — add to tests/ as modules are implemented)
+# Run tests (60 tests across models, chunking, retrieval, utils)
 pytest tests/ -v
+
+# If embedding model is cached and network is unavailable:
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 pytest tests/ -v
 
 # Run benchmarks
 python -m oil_painting_rag.evaluation.benchmark_runner
@@ -61,7 +64,13 @@ src/oil_painting_rag/
 
 ```
 data/
-├── raw/             # Ingested source documents by domain (pigments/, historical/, etc.)
+├── inbox/           # Pre-ingestion staging area — drop files here by type
+│   ├── pdf/         #   PDF documents
+│   ├── html/        #   HTML pages
+│   ├── markdown/    #   Markdown files
+│   ├── text/        #   Plain text files
+│   └── other/       #   Other formats
+├── raw/             # Ingested source documents (by source_id after ingest)
 ├── clean/           # Normalized markdown + metadata + tables
 ├── chunks/          # Split chunks: text/, tables/, metadata/
 ├── indexes/         # Persisted ChromaDB (chroma/) and BM25 (lexical/) indexes + cache/
@@ -102,8 +111,13 @@ The project is built in 4 strict sequential phases using Claude Code skills. Inv
 
 ## Current State
 
-Most Python modules are scaffolded stubs. Schema JSON files contain empty `{"type": "object", "properties": {}}` placeholders. Documentation files are marked as "Canonical draft placeholders."
+**Phase 4 (Code) is complete.** All Python modules are implemented. 60 tests pass. End-to-end pipeline (ingest → index → retrieve → generate) is operational.
+Needs: `OPENAI_API_KEY` in `.env` for real LLM answers (uses `EchoBackend` without it), and real source documents ingested.
 
-**Implement incrementally:** models → ingestion → indexing → retrieval → generation
+## Gotchas
 
-**When implementing `config.py`:** wire ChromaDB persistence path (`data/indexes/chroma/`) and embeddings model here — all other modules should import from config rather than hardcoding paths.
+- **Canonical domain values:** Always use values from `vocab/controlled_vocabulary.json` (e.g. `"pigment"` not `"pigments"`). The classifier and filters use canonical values; mismatches silently return 0 results.
+- **`IndexManager.status()` keys:** Returns `chroma_counts` (dict) and `bm25_size` (int) — not `chroma`/`lexical`.
+- **Embedding model offline:** `embeddings.py` tries `local_files_only=True` first, falls back to network. Set `HF_HUB_OFFLINE=1` if network is unavailable.
+- **ChromaDB list fields:** Stored as pipe-encoded strings (`"|".join(values)`). Use `pipe_encode()`/`pipe_decode()` from `utils/text_utils.py`.
+- **`clean_text()` preserves newlines:** Uses `re.sub(r"[^\S\n]+", " ", text)` — do not change to `\s+` or markdown headings break.
