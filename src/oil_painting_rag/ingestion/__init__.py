@@ -1,6 +1,7 @@
-# Module: src/oil_painting_rag/ingestion/__init__.py
+"""ingestion — Source capture, loading, and registry for the Oil Painting Research Assistant."""
 
-"""
-This module provides   init  .py functionality.
-"""
+from oil_painting_rag.ingestion.capture import SourceCapture
+from oil_painting_rag.ingestion.loader import SourceLoader
+from oil_painting_rag.ingestion.source_registry import SourceRegistry
 
+__all__ = ["SourceCapture", "SourceLoader", "SourceRegistry"]

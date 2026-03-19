@@ -1,6 +1,3 @@
-# Module: src/oil_painting_rag/__init__.py
+"""oil_painting_rag — Oil Painting Research Assistant RAG system."""
 
-"""
-This module provides   init  .py functionality.
-"""
-
+__version__ = "0.1.0"
