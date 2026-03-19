@@ -3,13 +3,12 @@ cli.py — Typer command-line interface for the Oil Painting Research Assistant.
 
 Commands:
     ask         Ask a question using the full RAG pipeline
-    ingest      Register and ingest a source document
-    scan-inbox  Batch-ingest all files from data/inbox/
+    intake      Intake source files — scan inbox or process a single file
     chunk       Chunk an ingested source
     index       Index chunked sources into ChromaDB + BM25
     status      Show index and source register status
     benchmark   Run the benchmark gold set
-    review      Show chunks pending review
+    review      Show sources pending review
     rebuild     Rebuild indexes from stored chunks
     conflicts   List active conflict records
     sources     List registered sources
@@ -126,149 +125,56 @@ def ask(
 
 
 # ---------------------------------------------------------------------------
-# ingest
+# intake
 # ---------------------------------------------------------------------------
 
 @app.command()
-def ingest(
-    file: Path = typer.Argument(..., help="Path to the source file"),
-    source_id: Optional[str] = typer.Option(None, "--source-id", help="Override source ID"),
-    title: Optional[str] = typer.Option(None, "--title"),
-    domain: str = typer.Option("mixed", "--domain"),
-    source_family: str = typer.Option("unknown", "--source-family"),
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
+def intake(
+    file: Optional[Path] = typer.Option(None, "--file", "-f", help="Process a single file (skip inbox scan)"),
 ) -> None:
-    """Register a source document and save it to raw storage."""
+    """Intake source files — scan inbox or process a single file."""
+    from oil_painting_rag.ingestion.intake_runner import process_file, _collect_inbox_files
     from oil_painting_rag.ingestion.capture import SourceCapture
+    from oil_painting_rag.ingestion.intake_classifier import IntakeClassifier
     from oil_painting_rag.ingestion.source_registry import SourceRegistry
-    from oil_painting_rag.models.source_models import SourceRecord
-    from oil_painting_rag.policies.source_policy import infer_trust_tier
-    from oil_painting_rag.utils.hash_utils import sha256_hex
 
     configure_logging()
     cfg.ensure_data_dirs()
 
-    if not file.exists():
-        console.print(f"[red]File not found:[/red] {file}")
-        raise typer.Exit(1)
-
-    raw_text = file.read_text(encoding="utf-8", errors="replace")
-    generated_id = source_id or f"SRC-{sha256_hex(str(file))[:8].upper()}"
-    tier = infer_trust_tier(source_family)
-
-    record = SourceRecord(
-        source_id=generated_id,
-        source_title=title or file.stem,
-        source_family=source_family,
-        domain=domain,
-        trust_tier=tier,
-        approval_state="internal_draft_only",
-        review_status="draft",
-        file_format=file.suffix.lstrip(".") or "txt",
-    )
-
+    classifier = IntakeClassifier()
     registry = SourceRegistry()
     capture = SourceCapture()
 
-    try:
-        registry.register(record)
-        capture.save_raw_file(generated_id, file.suffix.lstrip(".") or "txt", raw_text)
-        console.print(f"[green]Ingested:[/green] {generated_id} — {record.source_title}")
-        if verbose:
-            console.print(f"  Trust tier: {tier}  Domain: {domain}")
-    except Exception as exc:
-        console.print(f"[red]Ingest error:[/red] {exc}")
-        raise typer.Exit(1) from exc
+    if file:
+        if not file.exists():
+            console.print(f"[red]File not found:[/red] {file}")
+            raise typer.Exit(1)
+        result = process_file(file, None, classifier, registry, capture)
+        if result and result != "QUIT":
+            console.print(f"[green]Done:[/green] registered {result}")
+    else:
+        files = _collect_inbox_files()
+        if not files:
+            console.print("[yellow]No files found in data/inbox/[/yellow]")
+            return
 
+        console.print(f"Found [bold]{len(files)}[/bold] file(s) in inbox:")
+        for fpath, label in files:
+            console.print(f"  [{label}] {fpath.name}")
 
-# ---------------------------------------------------------------------------
-# scan-inbox
-# ---------------------------------------------------------------------------
+        registered: list[str] = []
+        skipped = 0
+        for fpath, label in files:
+            result = process_file(fpath, label, classifier, registry, capture)
+            if result == "QUIT":
+                console.print("\nStopped by user.")
+                break
+            elif result:
+                registered.append(result)
+            else:
+                skipped += 1
 
-@app.command(name="scan-inbox")
-def scan_inbox(
-    domain: str = typer.Option("mixed", "--domain", help="Default domain for all scanned files"),
-    source_family: str = typer.Option("unknown", "--source-family", help="Default source family"),
-    dry_run: bool = typer.Option(False, "--dry-run", help="List files without ingesting"),
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
-) -> None:
-    """Scan data/inbox/ subfolders and batch-ingest all files found."""
-    from oil_painting_rag.ingestion.capture import SourceCapture
-    from oil_painting_rag.ingestion.source_registry import SourceRegistry
-    from oil_painting_rag.models.source_models import SourceRecord
-    from oil_painting_rag.policies.source_policy import infer_trust_tier
-    from oil_painting_rag.utils.hash_utils import sha256_hex
-
-    configure_logging()
-    cfg.ensure_data_dirs()
-
-    inbox_subdirs = {
-        "pdf": cfg.INBOX_PDF_DIR,
-        "html": cfg.INBOX_HTML_DIR,
-        "markdown": cfg.INBOX_MARKDOWN_DIR,
-        "text": cfg.INBOX_TEXT_DIR,
-        "other": cfg.INBOX_OTHER_DIR,
-    }
-
-    # Collect all files across inbox subfolders
-    files_found: list[tuple[Path, str]] = []  # (path, subfolder_name)
-    for label, inbox_path in inbox_subdirs.items():
-        if not inbox_path.exists():
-            continue
-        for fpath in sorted(inbox_path.iterdir()):
-            if fpath.is_file() and not fpath.name.startswith("."):
-                files_found.append((fpath, label))
-
-    if not files_found:
-        console.print("[yellow]No files found in data/inbox/[/yellow]")
-        return
-
-    console.print(f"Found [bold]{len(files_found)}[/bold] file(s) in inbox:")
-    for fpath, label in files_found:
-        console.print(f"  [{label}] {fpath.name}")
-
-    if dry_run:
-        console.print("[yellow]Dry run — no files ingested[/yellow]")
-        return
-
-    registry = SourceRegistry()
-    capture = SourceCapture()
-    tier = infer_trust_tier(source_family)
-    ingested = 0
-    errors = 0
-
-    for fpath, label in files_found:
-        generated_id = f"SRC-{sha256_hex(str(fpath))[:8].upper()}"
-        file_format = fpath.suffix.lstrip(".") or label
-
-        try:
-            raw_text = fpath.read_text(encoding="utf-8", errors="replace")
-        except Exception as exc:
-            console.print(f"  [red]Read error:[/red] {fpath.name}: {exc}")
-            errors += 1
-            continue
-
-        record = SourceRecord(
-            source_id=generated_id,
-            source_title=fpath.stem,
-            source_family=source_family,
-            domain=domain,
-            trust_tier=tier,
-            approval_state="internal_draft_only",
-            review_status="draft",
-            file_format=file_format,
-        )
-
-        try:
-            registry.register(record)
-            capture.save_raw_file(generated_id, file_format, raw_text)
-            console.print(f"  [green]Ingested:[/green] {generated_id} — {fpath.name}")
-            ingested += 1
-        except Exception as exc:
-            console.print(f"  [red]Ingest error:[/red] {fpath.name}: {exc}")
-            errors += 1
-
-    console.print(f"\n[bold]Done:[/bold] {ingested} ingested, {errors} errors, {len(files_found)} total")
+        console.print(f"\n[bold]Done:[/bold] {len(registered)} registered, {skipped} skipped, {len(files)} total")
 
 
 # ---------------------------------------------------------------------------
@@ -404,27 +310,28 @@ def status() -> None:
 
 @app.command()
 def review(
-    approval_state: str = typer.Option("internal_draft_only", "--state"),
+    reviewed: bool = typer.Option(False, "--reviewed", help="Show reviewed sources (default: unreviewed)"),
     limit: int = typer.Option(20, "--limit", "-n"),
 ) -> None:
-    """Show sources/chunks pending review."""
+    """Show sources pending review."""
     from oil_painting_rag.ingestion.source_registry import SourceRegistry
 
     configure_logging()
     registry = SourceRegistry()
-    sources = [s for s in registry.all_sources() if s.approval_state == approval_state][:limit]
+    sources = [s for s in registry.all_sources() if s.qa_reviewed == reviewed][:limit]
 
+    label = "Reviewed" if reviewed else "Pending Review"
     if not sources:
-        console.print(f"No sources with approval_state={approval_state!r}")
+        console.print(f"No {label.lower()} sources found.")
         return
 
-    t = Table(title=f"Sources — {approval_state}")
+    t = Table(title=f"Sources — {label}")
     t.add_column("Source ID")
     t.add_column("Title")
     t.add_column("Domain")
     t.add_column("Tier", justify="right")
     for s in sources:
-        t.add_row(s.source_id, s.source_title[:50], s.domain, str(s.trust_tier))
+        t.add_row(s.source_id, s.short_title[:50], s.domain, str(s.trust_tier))
     console.print(t)
 
 
@@ -511,9 +418,10 @@ def sources(
     t.add_column("Title")
     t.add_column("Domain")
     t.add_column("Tier", justify="right")
-    t.add_column("State")
+    t.add_column("Ready")
     for s in all_src:
-        t.add_row(s.source_id, s.source_title[:40], s.domain, str(s.trust_tier), s.approval_state)
+        ready = "Yes" if s.ready_for_use else "No"
+        t.add_row(s.source_id, s.short_title[:40], s.domain, str(s.trust_tier), ready)
     console.print(t)
 
 
