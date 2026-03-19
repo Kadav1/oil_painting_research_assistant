@@ -1,0 +1,52 @@
+{
+  "source_family_patterns": {
+    "museum_conservation": {
+      "keywords": ["national gallery", "tate", "rijksmuseum", "met", "getty", "technical bulletin", "conservation report", "examination report", "treatment record"],
+      "weight": 1.0
+    },
+    "pigment_reference": {
+      "keywords": ["kremer", "pigment", "colour index", "color of art", "artists pigments", "pigment handbook", "color chart"],
+      "weight": 1.0
+    },
+    "manufacturer": {
+      "keywords": ["gamblin", "williamsburg", "old holland", "winsor", "schmincke", "blockx", "vasari", "rublev", "tds", "sds", "product catalog", "technical data sheet", "safety data sheet"],
+      "weight": 1.0
+    },
+    "historical_practice": {
+      "keywords": ["treatise", "de mayerne", "cennini", "vasari", "atelier", "recipe", "guild", "historical"],
+      "weight": 1.0
+    },
+    "color_theory": {
+      "keywords": ["color theory", "colour theory", "color mixing", "munsell", "color wheel", "gamut", "complementary"],
+      "weight": 1.0
+    },
+    "scientific_paper": {
+      "keywords": ["doi", "abstract", "peer-reviewed", "journal", "spectroscopy", "chromatography", "raman", "ftir", "xrf"],
+      "weight": 1.0
+    }
+  },
+  "domain_patterns": {
+    "pigment": ["pigment", "lead white", "ultramarine", "vermilion", "ochre", "cadmium", "cobalt", "titanium white", "zinc white", "umber", "sienna"],
+    "binder": ["linseed", "walnut oil", "poppy oil", "medium", "binder", "drying oil", "varnish", "stand oil", "alkyd"],
+    "conservation": ["conservation", "restoration", "degradation", "cleaning", "retouching", "x-ray", "cross-section", "inpainting"],
+    "historical_practice": ["treatise", "historical", "recipe", "guild", "apprentice", "palette", "practice"],
+    "color_theory": ["color theory", "color mixing", "optical", "complementary", "value", "chroma", "hue"],
+    "product": ["product", "catalog", "tds", "sds", "safety data", "technical data"],
+    "technique": ["technique", "impasto", "glazing", "scumbling", "alla prima", "underpainting", "grisaille"]
+  },
+  "capture_method_map": {
+    "pdf": "pdf_download",
+    "html": "html_scrape",
+    "markdown": "manual_transcription",
+    "text": "manual_transcription",
+    "other": "manual_entry"
+  },
+  "source_type_by_family": {
+    "museum_conservation": ["technical_bulletin", "conservation_report", "examination_report", "treatment_record"],
+    "pigment_reference": ["pigment_handbook", "pigment_database", "material_reference"],
+    "manufacturer": ["tds", "product_catalog", "sds"],
+    "historical_practice": ["historical_treatise", "atelier_manual", "period_recipe"],
+    "color_theory": ["color_theory_text", "color_reference"],
+    "scientific_paper": ["peer_reviewed_paper", "conference_paper", "technical_monograph"]
+  }
+}
