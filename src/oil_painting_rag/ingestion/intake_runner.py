@@ -58,7 +58,7 @@ def _prompt_pick(label: str, options: list[str], default: Optional[str] = None) 
         print(f"    (enter 1-{len(options)})")
 
 
-def _collect_inbox_files() -> list[tuple[Path, str]]:
+def collect_inbox_files() -> list[tuple[Path, str]]:
     """Scan inbox subdirectories for files. Returns (path, subfolder_name) pairs."""
     inbox_subdirs = {
         "pdf": cfg.INBOX_PDF_DIR,
@@ -248,7 +248,7 @@ def main() -> None:
             print(f"\nDone: registered {result}")
     else:
         # Batch mode — scan inbox
-        files = _collect_inbox_files()
+        files = collect_inbox_files()
         if not files:
             print("No files found in data/inbox/")
             return

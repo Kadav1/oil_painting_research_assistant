@@ -133,7 +133,7 @@ def intake(
     file: Optional[Path] = typer.Option(None, "--file", "-f", help="Process a single file (skip inbox scan)"),
 ) -> None:
     """Intake source files — scan inbox or process a single file."""
-    from oil_painting_rag.ingestion.intake_runner import process_file, _collect_inbox_files
+    from oil_painting_rag.ingestion.intake_runner import process_file, collect_inbox_files
     from oil_painting_rag.ingestion.capture import SourceCapture
     from oil_painting_rag.ingestion.intake_classifier import IntakeClassifier
     from oil_painting_rag.ingestion.source_registry import SourceRegistry
@@ -153,7 +153,7 @@ def intake(
         if result and result != "QUIT":
             console.print(f"[green]Done:[/green] registered {result}")
     else:
-        files = _collect_inbox_files()
+        files = collect_inbox_files()
         if not files:
             console.print("[yellow]No files found in data/inbox/[/yellow]")
             return
