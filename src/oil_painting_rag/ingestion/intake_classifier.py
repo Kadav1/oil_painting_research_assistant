@@ -109,6 +109,8 @@ class IntakeClassifier:
     def __init__(self) -> None:
         self._patterns = _load_patterns()
         self._family_codes = _load_family_codes()
+        # Synthetic entry for auto-mode unknown family handling
+        self._family_codes.setdefault("unknown", "UNK")
 
     @property
     def family_codes(self) -> dict[str, str]:

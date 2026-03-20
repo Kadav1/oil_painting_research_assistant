@@ -115,3 +115,21 @@ class TestBuildFilename:
         (tmp_path / "SRC-MUS-001_bulletin.pdf").touch()
         result = build_intake_filename("SRC-MUS-001", "Bulletin", ".pdf", dest_dir=tmp_path)
         assert result == "SRC-MUS-001_bulletin_2.pdf"
+
+
+class TestUnknownFamilyCode:
+    def test_classifier_has_unknown_family_code(self):
+        from oil_painting_rag.ingestion.intake_classifier import IntakeClassifier
+        clf = IntakeClassifier()
+        assert "unknown" in clf.family_codes
+        assert clf.family_codes["unknown"] == "UNK"
+
+    def test_next_source_id_with_unk(self):
+        from oil_painting_rag.ingestion.intake_classifier import next_source_id
+        result = next_source_id("UNK", existing_ids=[])
+        assert result == "SRC-UNK-001"
+
+    def test_next_source_id_unk_increments(self):
+        from oil_painting_rag.ingestion.intake_classifier import next_source_id
+        result = next_source_id("UNK", existing_ids=["SRC-UNK-001", "SRC-UNK-002"])
+        assert result == "SRC-UNK-003"
