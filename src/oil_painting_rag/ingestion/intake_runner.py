@@ -7,6 +7,7 @@ Used by both scripts/intake.py and the CLI intake subcommand.
 
 from __future__ import annotations
 
+import re as _re
 import shutil
 import sys
 from pathlib import Path
@@ -18,11 +19,23 @@ from oil_painting_rag.ingestion.intake_classifier import (
     IntakeClassifier,
     build_intake_filename,
     next_source_id,
+    sanitize_short_title,
 )
+from oil_painting_rag.ingestion.pdf_metadata_reader import extract_pdf_metadata
 from oil_painting_rag.ingestion.source_registry import SourceRegistry
 from oil_painting_rag.logging_utils import get_logger
 
 logger = get_logger(__name__)
+
+
+def _title_from_filename(filename: str) -> str:
+    """Derive a human-readable title from a filename.
+
+    Strips extension, replaces hyphens/underscores with spaces, title-cases.
+    """
+    stem = Path(filename).stem
+    spaced = _re.sub(r"[-_]+", " ", stem)
+    return spaced.title()
 
 
 def _prompt(label: str, default: Optional[str] = None) -> str:
@@ -87,16 +100,106 @@ def _load_vocab_values(key: str) -> list[str]:
     return vocab.get(key, {}).get("values", [])
 
 
+def _auto_process(
+    filepath: Path,
+    source_id: str,
+    family_result,
+    domain_result,
+    capture_method: str,
+    classifier: IntakeClassifier,
+    registry: SourceRegistry,
+    capture: SourceCapture,
+) -> Optional[str]:
+    """Auto-process a file without prompts. Uses PDF metadata + filename fallbacks."""
+    # --- Resolve fields from PDF metadata + fallbacks ---
+    pdf_meta = extract_pdf_metadata(filepath)
+
+    # Title
+    title = pdf_meta["title"] or _title_from_filename(filepath.name)
+    short_title = sanitize_short_title(pdf_meta["title"] or filepath.stem)
+
+    # Institution / author
+    institution = pdf_meta["creator"] or "unknown"
+    author = pdf_meta["author"]
+
+    # Source type — first from family mapping, fallback to web_article
+    source_types = classifier.source_type_by_family.get(family_result.value, [])
+    source_type = source_types[0] if source_types else "web_article"
+
+    # Fixed defaults
+    access_type = "open_access"
+    publication_year = None
+    source_url = None
+
+    # --- File operations ---
+    extension = filepath.suffix
+    dest_dir = cfg.RAW_DIR / source_id
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    new_filename = build_intake_filename(
+        source_id, short_title, extension, dest_dir=dest_dir,
+    )
+    dest_path = dest_dir / new_filename
+
+    original_path = filepath
+    shutil.move(str(filepath), str(dest_path))
+
+    # --- Print detailed summary ---
+    print(f"[AUTO] {source_id}")
+    print(f"  title      : {title}")
+    print(f"  family     : {family_result.value} ({family_result.confidence})")
+    print(f"  domain     : {domain_result.value} ({domain_result.confidence})")
+    print(f"  source_type: {source_type}")
+    print(f"  source     : {filepath.name} -> data/raw/{source_id}/{new_filename}")
+
+    # --- Register with rollback ---
+    try:
+        capture.register_source(
+            source_id=source_id,
+            title=title,
+            short_title=short_title,
+            source_family=family_result.value,
+            source_type=source_type,
+            institution_or_publisher=institution,
+            domain=domain_result.value,
+            capture_method=capture_method,
+            access_type=access_type,
+            raw_file_name=new_filename,
+            author=author,
+            publication_year=publication_year,
+            source_url=source_url,
+        )
+        registry.update_field(source_id, "raw_captured", True)
+        return source_id
+
+    except Exception as exc:
+        logger.error("Registration failed for %s: %s", source_id, exc)
+        print(f"  [ERROR] Registration failed: {exc}")
+        try:
+            shutil.move(str(dest_path), str(original_path))
+            if dest_dir.exists() and not any(dest_dir.iterdir()):
+                dest_dir.rmdir()
+            print(f"  Rolled back file move.")
+        except Exception as rollback_exc:
+            logger.error("Rollback failed: %s", rollback_exc)
+            print(f"  [ERROR] Rollback also failed: {rollback_exc}")
+        return None
+
+
 def process_file(
     filepath: Path,
     inbox_subfolder: Optional[str],
     classifier: IntakeClassifier,
     registry: SourceRegistry,
     capture: SourceCapture,
+    auto: bool = False,
 ) -> Optional[str]:
     """
     Process a single file through intake. Returns source_id on success, None on skip.
     Returns "QUIT" if user wants to stop batch processing.
+
+    When *auto* is True (or both family and domain confidence are high/medium
+    and family is not unknown), the file is auto-processed without interactive
+    prompts using PDF metadata and filename-derived fallbacks.
     """
     print(f"\n{'─' * 60}")
     print(f"  Intake: {filepath.name}")
@@ -108,15 +211,40 @@ def process_file(
     domain_result = classifier.infer_domain(filepath.name, content)
     capture_method = classifier.infer_capture_method(inbox_subfolder or "other")
 
+    # Determine if we should auto-process
+    should_auto = auto or (
+        family_result.confidence in ("high", "medium")
+        and domain_result.confidence in ("high", "medium")
+        and family_result.value != "unknown"
+    )
+
     # Get family code and next source_id
     family_codes = classifier.family_codes
     family_code = family_codes.get(family_result.value)
+
+    if not family_code and should_auto:
+        family_code = "UNK"
+    elif not family_code and not should_auto:
+        family_code = None
 
     if family_code:
         existing_ids = registry.list_ids()
         source_id = next_source_id(family_code, existing_ids)
     else:
         source_id = "SRC-???-001"
+
+    # --- Auto-process branch ---
+    if should_auto:
+        return _auto_process(
+            filepath=filepath,
+            source_id=source_id,
+            family_result=family_result,
+            domain_result=domain_result,
+            capture_method=capture_method,
+            classifier=classifier,
+            registry=registry,
+            capture=capture,
+        )
 
     # --- Display inferred values ---
     print(f"\n  Inferred:")

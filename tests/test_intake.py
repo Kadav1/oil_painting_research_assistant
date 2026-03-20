@@ -117,6 +117,154 @@ class TestBuildFilename:
         assert result == "SRC-MUS-001_bulletin_2.pdf"
 
 
+from unittest.mock import MagicMock, patch
+
+
+class TestAutoMode:
+    """Test auto-mode field resolution in process_file."""
+
+    def _make_classifier(self, family="manufacturer", family_conf="high",
+                         domain="product", domain_conf="high"):
+        """Create a mock classifier with controlled inference results."""
+        from oil_painting_rag.ingestion.intake_classifier import InferenceResult
+
+        clf = MagicMock()
+        clf.family_codes = {"manufacturer": "MFR", "museum_conservation": "MUS", "unknown": "UNK"}
+        clf.source_type_by_family = {"manufacturer": ["tds", "product_catalog", "sds"]}
+        clf.read_content_preview.return_value = ""
+        clf.infer_source_family.return_value = InferenceResult(
+            value=family, confidence=family_conf, hits=3
+        )
+        clf.infer_domain.return_value = InferenceResult(
+            value=domain, confidence=domain_conf, hits=3
+        )
+        clf.infer_capture_method.return_value = "pdf_download"
+        return clf
+
+    def _make_registry(self, existing_ids=None):
+        registry = MagicMock()
+        registry.list_ids.return_value = existing_ids or []
+        return registry
+
+    def _make_capture(self):
+        return MagicMock()
+
+    @patch("oil_painting_rag.ingestion.intake_runner.extract_pdf_metadata")
+    @patch("oil_painting_rag.ingestion.intake_runner.shutil")
+    @patch("oil_painting_rag.ingestion.intake_runner.cfg")
+    def test_auto_flag_skips_prompts(self, mock_cfg, mock_shutil, mock_pdf_meta, tmp_path):
+        """With auto=True and high confidence, process_file completes without input()."""
+        from oil_painting_rag.ingestion.intake_runner import process_file
+
+        mock_cfg.RAW_DIR = tmp_path
+        mock_pdf_meta.return_value = {
+            "title": "Sennelier Product Catalog",
+            "author": "Sennelier",
+            "creator": "Sennelier SAS",
+        }
+        test_file = tmp_path / "sennelier-catalog.pdf"
+        test_file.write_bytes(b"%PDF-1.4 fake")
+
+        clf = self._make_classifier()
+        registry = self._make_registry()
+        capture = self._make_capture()
+
+        result = process_file(test_file, "pdf", clf, registry, capture, auto=True)
+
+        assert result == "SRC-MFR-001"
+        capture.register_source.assert_called_once()
+        call_kwargs = capture.register_source.call_args[1]
+        assert call_kwargs["title"] == "Sennelier Product Catalog"
+        assert call_kwargs["institution_or_publisher"] == "Sennelier SAS"
+        assert call_kwargs["source_type"] == "tds"  # first in source_type_by_family
+        assert call_kwargs["access_type"] == "open_access"
+
+    @patch("oil_painting_rag.ingestion.intake_runner.extract_pdf_metadata")
+    @patch("oil_painting_rag.ingestion.intake_runner.shutil")
+    @patch("oil_painting_rag.ingestion.intake_runner.cfg")
+    def test_auto_uses_filename_when_no_pdf_title(self, mock_cfg, mock_shutil, mock_pdf_meta, tmp_path):
+        """When PDF has no title metadata, falls back to filename-derived title."""
+        from oil_painting_rag.ingestion.intake_runner import process_file
+
+        mock_cfg.RAW_DIR = tmp_path
+        mock_pdf_meta.return_value = {"title": None, "author": None, "creator": None}
+        test_file = tmp_path / "sennelier-NuancierHXF-EN.pdf"
+        test_file.write_bytes(b"%PDF-1.4 fake")
+
+        clf = self._make_classifier()
+        registry = self._make_registry()
+        capture = self._make_capture()
+
+        result = process_file(test_file, "pdf", clf, registry, capture, auto=True)
+
+        assert result == "SRC-MFR-001"
+        call_kwargs = capture.register_source.call_args[1]
+        assert call_kwargs["title"] == "Sennelier Nuancierhxf En"
+        assert call_kwargs["institution_or_publisher"] == "unknown"
+
+    @patch("oil_painting_rag.ingestion.intake_runner.extract_pdf_metadata")
+    @patch("oil_painting_rag.ingestion.intake_runner.shutil")
+    @patch("oil_painting_rag.ingestion.intake_runner.cfg")
+    def test_auto_unknown_family_uses_unk(self, mock_cfg, mock_shutil, mock_pdf_meta, tmp_path):
+        """With auto=True and unknown family, uses SRC-UNK-xxx."""
+        from oil_painting_rag.ingestion.intake_runner import process_file
+
+        mock_cfg.RAW_DIR = tmp_path
+        mock_pdf_meta.return_value = {"title": None, "author": None, "creator": None}
+        test_file = tmp_path / "mystery-doc.pdf"
+        test_file.write_bytes(b"%PDF-1.4 fake")
+
+        clf = self._make_classifier(family="unknown", family_conf="low")
+        registry = self._make_registry()
+        capture = self._make_capture()
+
+        result = process_file(test_file, "pdf", clf, registry, capture, auto=True)
+
+        assert result == "SRC-UNK-001"
+        call_kwargs = capture.register_source.call_args[1]
+        assert call_kwargs["source_family"] == "unknown"
+        assert call_kwargs["source_type"] == "web_article"  # fallback
+
+    @patch("oil_painting_rag.ingestion.intake_runner.extract_pdf_metadata")
+    @patch("oil_painting_rag.ingestion.intake_runner.shutil")
+    @patch("oil_painting_rag.ingestion.intake_runner.cfg")
+    def test_no_auto_flag_high_confidence_still_auto(self, mock_cfg, mock_shutil, mock_pdf_meta, tmp_path):
+        """Without --auto, but high confidence on both family+domain -> auto-processes."""
+        from oil_painting_rag.ingestion.intake_runner import process_file
+
+        mock_cfg.RAW_DIR = tmp_path
+        mock_pdf_meta.return_value = {"title": "Test Title", "author": None, "creator": None}
+        test_file = tmp_path / "test.pdf"
+        test_file.write_bytes(b"%PDF-1.4 fake")
+
+        clf = self._make_classifier(family_conf="high", domain_conf="high")
+        registry = self._make_registry()
+        capture = self._make_capture()
+
+        # auto=False (default), but both confidences high -> auto-process
+        result = process_file(test_file, "pdf", clf, registry, capture, auto=False)
+
+        assert result == "SRC-MFR-001"
+        capture.register_source.assert_called_once()
+
+
+class TestTitleFromFilename:
+    def test_hyphens_and_underscores_to_spaces(self):
+        from oil_painting_rag.ingestion.intake_runner import _title_from_filename
+        result = _title_from_filename("sennelier-NuancierHXF-EN.pdf")
+        assert result == "Sennelier Nuancierhxf En"
+
+    def test_extension_stripped(self):
+        from oil_painting_rag.ingestion.intake_runner import _title_from_filename
+        result = _title_from_filename("my_document.txt")
+        assert result == "My Document"
+
+    def test_no_extension(self):
+        from oil_painting_rag.ingestion.intake_runner import _title_from_filename
+        result = _title_from_filename("some-file")
+        assert result == "Some File"
+
+
 class TestUnknownFamilyCode:
     def test_classifier_has_unknown_family_code(self):
         from oil_painting_rag.ingestion.intake_classifier import IntakeClassifier
