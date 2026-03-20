@@ -359,6 +359,7 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Oil Painting RAG — Source Intake")
     parser.add_argument("--file", type=Path, help="Process a single file (skip inbox scan)")
+    parser.add_argument("--auto", action="store_true", help="Auto-process without prompts")
     args = parser.parse_args()
 
     cfg.ensure_data_dirs()
@@ -371,7 +372,7 @@ def main() -> None:
         if not args.file.exists():
             print(f"File not found: {args.file}")
             sys.exit(1)
-        result = process_file(args.file, None, classifier, registry, capture)
+        result = process_file(args.file, None, classifier, registry, capture, auto=args.auto)
         if result and result != "QUIT":
             print(f"\nDone: registered {result}")
     else:
@@ -390,7 +391,7 @@ def main() -> None:
         skipped = 0
 
         for fpath, label in files:
-            result = process_file(fpath, label, classifier, registry, capture)
+            result = process_file(fpath, label, classifier, registry, capture, auto=args.auto)
             if result == "QUIT":
                 print("\nStopped by user.")
                 break

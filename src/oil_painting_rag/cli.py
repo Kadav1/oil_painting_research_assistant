@@ -131,6 +131,7 @@ def ask(
 @app.command()
 def intake(
     file: Optional[Path] = typer.Option(None, "--file", "-f", help="Process a single file (skip inbox scan)"),
+    auto: bool = typer.Option(False, "--auto", help="Auto-process without prompts"),
 ) -> None:
     """Intake source files — scan inbox or process a single file."""
     from oil_painting_rag.ingestion.intake_runner import process_file, collect_inbox_files
@@ -149,7 +150,7 @@ def intake(
         if not file.exists():
             console.print(f"[red]File not found:[/red] {file}")
             raise typer.Exit(1)
-        result = process_file(file, None, classifier, registry, capture)
+        result = process_file(file, None, classifier, registry, capture, auto=auto)
         if result and result != "QUIT":
             console.print(f"[green]Done:[/green] registered {result}")
     else:
@@ -165,7 +166,7 @@ def intake(
         registered: list[str] = []
         skipped = 0
         for fpath, label in files:
-            result = process_file(fpath, label, classifier, registry, capture)
+            result = process_file(fpath, label, classifier, registry, capture, auto=auto)
             if result == "QUIT":
                 console.print("\nStopped by user.")
                 break
