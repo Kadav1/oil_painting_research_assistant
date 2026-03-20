@@ -63,11 +63,11 @@ When auto-processing, resolve all required `SourceRecord` fields without prompts
 | `source_id` | `next_source_id(family_code, existing_ids)` | `next_source_id("UNK", existing_ids)` if family unknown |
 | `capture_method` | `infer_capture_method(inbox_subfolder)` | Always resolves |
 | `title` | PDF metadata `/Title` | Filename stem with underscores→spaces, title-cased |
-| `short_title` | PDF metadata `/Title` (truncated to 60 chars) | Filename stem (sanitized) |
-| `institution` | PDF metadata `/Creator` | `"unknown"` |
+| `short_title` | PDF metadata `/Title` passed through `sanitize_short_title()` | Filename stem passed through `sanitize_short_title()` |
+| `institution_or_publisher` | PDF metadata `/Creator` | `"unknown"` |
 | `author` | PDF metadata `/Author` | `None` |
-| `source_type` | First value from `source_type_by_family[family]` | `"unknown"` |
-| `access_type` | `"unknown"` | — |
+| `source_type` | First value from `source_type_by_family[family]` | `"web_article"` (most generic canonical value) |
+| `access_type` | `"open_access"` | — |
 | `publication_year` | `None` | — |
 | `source_url` | `None` | — |
 
@@ -86,8 +86,8 @@ When PDF metadata has no `/Title` or the file is not a PDF:
 ```
 [AUTO] SRC-MFR-001
   title      : Sennelier NuancierHXF EN
-  family     : manufacturer_data (high)
-  domain     : manufacturer_data (high)
+  family     : manufacturer (high)
+  domain     : product (high)
   source_type: product_catalog
   source     : sennelier-NuancierHXF-EN.pdf → data/raw/SRC-MFR-001/
 ```
