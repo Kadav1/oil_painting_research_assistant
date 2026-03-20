@@ -210,16 +210,15 @@ def chunk(
 
     for src in sources:
         try:
-            text = loader.load_clean_text(src.source_id) or loader.extract_text_from_raw(src.source_id)
+            text = loader.load_clean_text(src.source_id) or loader.extract_text_from_raw(src.source_id, src.raw_file_name)
             if not text:
                 console.print(f"[yellow]No text for[/yellow] {src.source_id}")
                 continue
             chunks = prose_chunker.chunk_source(src, text)
-            table_chunks = table_chunker.chunk_source(src, text)
+            table_chunks = table_chunker.chunk_tables(src, text)
             all_chunks = chunks + table_chunks
             for ch in all_chunks:
-                fs.save_chunk_text(ch.chunk_id, ch.text)
-                fs.save_chunk_metadata(ch.chunk_id, ch.model_dump())
+                fs.save_chunk(ch.chunk_id, ch.text, ch.model_dump())
             console.print(f"[green]Chunked[/green] {src.source_id}: {len(all_chunks)} chunks")
         except Exception as exc:
             console.print(f"[red]Chunk error[/red] {src.source_id}: {exc}")
@@ -440,10 +439,7 @@ def benchmark(
 
     configure_logging()
     mgr = _get_index_manager()
-    runner = BenchmarkRunner(
-        index_manager=mgr,
-        output_dir=output_dir or cfg.BENCHMARKS_DIR,  # type: ignore[call-arg]
-    )
+    runner = BenchmarkRunner(index_manager=mgr)
     results = runner.run(max_records=max_records)
 
     passed = sum(1 for r in results if r.failure_tags == [])
@@ -453,7 +449,7 @@ def benchmark(
     )
 
     if results:
-        out = runner.save_results(results)
+        out = runner.save_results(results, output_dir=output_dir or cfg.BENCHMARKS_DIR)
         console.print(f"Results: {out}")
 
 
