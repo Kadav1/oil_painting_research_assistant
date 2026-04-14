@@ -22,7 +22,7 @@ python -m oil_painting_rag.cli
 # Run API server (FastAPI + uvicorn)
 python -m oil_painting_rag.api
 
-# Run tests (60 tests across models, chunking, retrieval, utils)
+# Run tests (91 tests across models, chunking, retrieval, intake, utils)
 pytest tests/ -v
 
 # If embedding model is cached and network is unavailable:
@@ -111,13 +111,17 @@ The project is built in 4 strict sequential phases using Claude Code skills. Inv
 
 ## Current State
 
-**Phase 4 (Code) is complete.** All Python modules are implemented. 60 tests pass. End-to-end pipeline (ingest → index → retrieve → generate) is operational.
+**Phase 4 (Code) is complete.** All Python modules are implemented. 91 tests pass. End-to-end pipeline (ingest → index → retrieve → generate) is operational.
 Needs: `OPENAI_API_KEY` in `.env` for real LLM answers (uses `EchoBackend` without it), and real source documents ingested.
 
 ## Gotchas
 
+- **Interactive scripts from Bash tool:** `input()` calls fail without a TTY. Use `--auto` flag for intake (`python -m oil_painting_rag.cli intake --auto`).
+- **Fallback values must be canonical:** When defaulting fields in auto-mode or elsewhere, use vocab-valid values (e.g. `"web_article"` not `"unknown"` for `source_type`, `"open_access"` for `access_type`).
+- **CLI method names vs actual APIs:** `TableChunker.chunk_tables()` (not `chunk_source`), `FilesystemStore.save_chunk()` (not `save_chunk_text`/`save_chunk_metadata`), `SourceLoader.extract_text_from_raw(source_id, filename)` (requires both args).
 - **Canonical domain values:** Always use values from `vocab/controlled_vocabulary.json` (e.g. `"pigment"` not `"pigments"`). The classifier and filters use canonical values; mismatches silently return 0 results.
 - **`IndexManager.status()` keys:** Returns `chroma_counts` (dict) and `bm25_size` (int) — not `chroma`/`lexical`.
 - **Embedding model offline:** `embeddings.py` tries `local_files_only=True` first, falls back to network. Set `HF_HUB_OFFLINE=1` if network is unavailable.
 - **ChromaDB list fields:** Stored as pipe-encoded strings (`"|".join(values)`). Use `pipe_encode()`/`pipe_decode()` from `utils/text_utils.py`.
 - **`clean_text()` preserves newlines:** Uses `re.sub(r"[^\S\n]+", " ", text)` — do not change to `\s+` or markdown headings break.
+- **`SourceRecord` uses `extra = "forbid"`:** Cannot pass undeclared fields. Check model definition before adding new kwargs to `register_source()`.
